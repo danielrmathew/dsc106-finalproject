@@ -5,7 +5,7 @@
 <main>
   <h1>Svelte template</h1>
 
-  <p>Write your HTML here</p>
+  <p>Write your HTML here: woohoo HTML</p>
 </main>
 
 <style>
