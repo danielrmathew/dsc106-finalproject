@@ -1,13 +1,42 @@
 <script>
-  // Write your JS here, or import other files
+  // nothing for now
 </script>
 
 <main>
-  <h1>Svelte template</h1>
-
-  <p>Write your HTML here: woohoo HTML</p>
+  <div class="container">
+    <section class="one">
+      <h1>First Page - Intro to Project</h1>
+    </section>
+    <section class="two">
+      <h1>Graph Component</h1>
+    </section>
+  </div>
 </main>
 
 <style>
-  /* Write your CSS here */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+
+  :global(body) {
+    margin: 0;
+    padding: 0;
+  }
+
+  section {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    scroll-snap-align: start;
+  }
+  
+  .container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
+  }
 </style>
