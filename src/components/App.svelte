@@ -29,7 +29,7 @@
         <button on:click={validatePoly} type="submit">Enter</button>
       </div>
     </section>
-    <section class="two">
+    <section class="chart">
       <Graph />
     </section>
   </div>
@@ -54,7 +54,7 @@
     align-items: center;
     scroll-snap-align: start;
     text-align: center;
-    padding: 50% 0;
+    padding: 0;
     border-style: solid;
   }
   
