@@ -1,59 +1,79 @@
 <script>
-    import { onMount } from "svelte";
-  
-    onMount(() => {
-      // Any additional setup or interactions can be added here
-    });
-  </script>
-  
-  <style>
-    .graph-container {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+  import { onMount } from 'svelte';
+
+  let width, height;
+  let xScale, yScale;
+  let svg;
+
+  onMount(() => {
+    if (typeof window !== 'undefined') {
+      // Set up initial dimensions
+      width = window.innerWidth;
+      height = window.innerHeight;
+
+      // Set up initial scale and translate
+      xScale = d3.scaleLinear().domain([-10, 10]).range([0, width]);
+      yScale = d3.scaleLinear().domain([-10, 10]).range([height, 0]);
+
+      // Initialize zoom behavior
+      const zoom = d3.zoom()
+        .scaleExtent([1, 10])
+        .on("zoom", zoomed);
+
+      // Create SVG container
+      svg = d3.select("#chart")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .call(zoom);
+
+      // Create axes
+      const xAxis = d3.axisBottom(xScale);
+      const yAxis = d3.axisLeft(yScale);
+
+      // Draw axes
+      svg.append("g")
+        .attr("class", "x-axis")
+        .attr("transform", `translate(0, ${height / 2})`)
+        .call(xAxis);
+
+      svg.append("g")
+        .attr("class", "y-axis")
+        .attr("transform", `translate(${width / 2}, 0)`)
+        .call(yAxis);
+
+      // Draw initial points or other content
+      svg.append("circle")
+        .attr("cx", xScale(0))
+        .attr("cy", yScale(0))
+        .attr("r", 5)
+        .attr("fill", "red");
     }
-  
-    .quadrant {
-      position: absolute;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-    }
-  
-    .x-axis,
-    .y-axis {
-      position: absolute;
-      background-color: #ccc;
-      box-sizing: border-box;
-    }
-  
-    .x-axis {
-      height: 1px;
-      width: 100%;
-      left: 0;
-    }
-  
-    .y-axis {
-      height: 100%;
-      width: 1px;
-      top: 0;
-    }
-  </style>
-  
-  <div class="graph-container">
-    <!-- Quadrant 1 -->
-    <div class="quadrant" style="top: 0; left: 0; width: 50%; height: 50%;"></div>
-    <!-- Quadrant 2 -->
-    <div class="quadrant" style="top: 0; left: 50%; width: 50%; height: 50%;"></div>
-    <!-- Quadrant 3 -->
-    <div class="quadrant" style="top: 50%; left: 0; width: 50%; height: 50%;"></div>
-    <!-- Quadrant 4 -->
-    <div class="quadrant" style="top: 50%; left: 50%; width: 50%; height: 50%;"></div>
-  
-    <!-- X-Axis -->
-    <div class="x-axis" style="top: 50%;"></div>
-    <!-- Y-Axis -->
-    <div class="y-axis" style="left: 50%;"></div>
-  </div>
-  
+  });
+
+  function zoomed(event) {
+    const { transform } = event;
+
+    // Update scales with new transform
+    xScale = transform.rescaleX(xScale);
+    yScale = transform.rescaleY(yScale);
+
+    // Update axes with new scales
+    svg.select(".x-axis").call(d3.axisBottom(xScale));
+    svg.select(".y-axis").call(d3.axisLeft(yScale));
+
+    // Update points or other content with new scales
+    svg.selectAll("circle")
+      .attr("cx", xScale(0))
+      .attr("cy", yScale(0));
+  }
+</script>
+
+<style>
+  #chart {
+    width: 100%;
+    height: 100vh;
+  }
+</style>
+
+<div id="chart"></div>
