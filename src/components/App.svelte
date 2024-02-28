@@ -1,14 +1,15 @@
 <script>
-  // nothing for now
+  import Graph from '../components/Graph.svelte'
 </script>
 
 <main>
   <div class="container">
     <section class="one">
       <h1>First Page - Intro to Project</h1>
+      <p>text here about our project</p>
     </section>
     <section class="two">
-      <h1>Graph Component</h1>
+      <Graph />
     </section>
   </div>
 </main>
@@ -28,10 +29,12 @@
 
   section {
     height: 100vh;
-    display: flex;
     justify-content: center;
     align-items: center;
     scroll-snap-align: start;
+    text-align: center;
+    padding: 50% 0;
+    border-style: solid;
   }
   
   .container {
