@@ -3,13 +3,11 @@
     import * as d3 from 'd3';
 
     var data = [
-                { x: 1, y: 1 },
-                { x: 2, y: 3 },
-                { x: 3, y: 2 },
-                { x: 4, y: 5 },
+                { x: 10, y: 10},
                 { x: 5, y: 4 },
-                { x: 6, y: 7 },
-                { x: 7, y: 6 }
+                { x: 2, y: 3 },
+                { x: 0, y: 0},
+                { x: -1, y: -1},   
             ];
 
     onMount(() => {
@@ -19,7 +17,7 @@
             height = 400 - margin.top - margin.bottom;
         
         // append the SVG object to the body of the page
-        var SVG = d3.select("#dataviz_axisZoom")
+        var SVG = d3.select("#graph")
             .append("svg")
               .attr("width", width + margin.left + margin.right)
               .attr("height", height + margin.top + margin.bottom)
@@ -27,14 +25,9 @@
               .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
         
-        //Read the data
-        // let fp = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv"
-        // d3.csv(fp, function(data) {
-        // d3.csv(fp).then((data) => {
-        
         // Add X axis
         var x = d3.scaleLinear()
-            .domain([4, 8])
+            .domain([0, 8])
             .range([ 0, width ]);
         var xAxis = SVG.append("g")
             .attr("transform", "translate(0," + height + ")")
@@ -75,40 +68,26 @@
         // Add line
         var line = d3.line()
             .x(function(d) { return x(d.x); })
-            .y(function(d) { return y(d.y); });
+            .y(function(d) { return y(d.y); })
+            .curve(d3.curveMonotoneX);
 
         SVG.append("path")
             .datum(data)
             .attr("fill", "none")
             .attr("stroke", "#61a3a9")
             .attr("stroke-width", 2)
-            .attr("d", line);
+            .attr("class", "line")
+            .attr("d", line)
+            .attr("clip-path", "url(#clip)");
 
-        var clip = SVG.append("defs").append("clipPath")
-            .attr("id", "clip")
-            .append("rect")
-            .attr("width", width)
-            .attr("height", height);
-    
+        
         // Apply clip path to the line
-        SVG.select("path").attr("clip-path", "url(#clip)");
+        // SVG.select("path").attr("clip-path", "url(#clip)");
 
         
         // Create the scatter variable: where both the circles and the brush take place
         // var scatter = SVG.append('g')
         //     .attr("clip-path", "url(#clip)")
-    
-        // // // Add circles
-        // scatter
-        //     .selectAll("circle")
-        //     .data(data)
-        //     .enter()
-        //     .append("circle")
-        //     .attr("cx", function (d) { return x(d.Sepal_Length); } )
-        //     .attr("cy", function (d) { return y(d.Petal_Length); } )
-        //     .attr("r", 8)
-        //     .style("fill", "#61a3a9")
-        //     .style("opacity", 0.5)
 
         // A function that updates the chart when the user zoom and thus new boundaries are available
         function updateChart(event) {
@@ -118,14 +97,18 @@
             var newY = event.transform.rescaleY(y);
         
             // update axes with these new boundaries
-            xAxis.call(d3.axisBottom(newX))
-            yAxis.call(d3.axisLeft(newY))
-        
-            // update circle position
-            scatter
-                .selectAll("circle")
-                .attr('cx', function(d) {return newX(d.Sepal_Length)})
-                .attr('cy', function(d) {return newY(d.Petal_Length)});
+            xAxis.call(d3.axisBottom(newX));
+            yAxis.call(d3.axisLeft(newY));
+            
+            // update line position
+            var newLine = d3.line()
+            .x(function(d) { return newX(d.x); })
+            .y(function(d) { return newY(d.y); })
+            .curve(d3.curveMonotoneX);
+
+            SVG.select('.line')
+                .attr("d", newLine);
+
         }
         
         // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
@@ -152,7 +135,7 @@
 
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
-    <div id="dataviz_axisZoom"></div>
+    <div id="graph"></div>
 </main> 
   
 <style>
