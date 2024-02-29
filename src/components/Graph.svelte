@@ -10,16 +10,17 @@
         
         // append the SVG object to the body of the page
         var SVG = d3.select("#dataviz_axisZoom")
-        .append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-            .attr("transform",
+            .append("svg")
+              .attr("width", width + margin.left + margin.right)
+              .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+              .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");
         
         //Read the data
         let fp = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv"
-        d3.csv(fp, function(data) {
+        // d3.csv(fp, function(data) {
+        d3.csv(fp).then((data) => {
         
             // Add X axis
             var x = d3.scaleLinear()
@@ -62,38 +63,38 @@
                 .style("opacity", 0.5)
             
             // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
-            var zoom = d3.zoom()
-                .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
-                .extent([[0, 0], [width, height]])
-                .on("zoom", updateChart);
+            // var zoom = d3.zoom()
+            //     .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
+            //     .extent([[0, 0], [width, height]])
+            //     .on("zoom", updateChart);
             
             // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
-            SVG.append("rect")
-                .attr("width", width)
-                .attr("height", height)
-                .style("fill", "none")
-                .style("pointer-events", "all")
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-                .call(zoom);
+            // SVG.append("rect")
+            //     .attr("width", width)
+            //     .attr("height", height)
+            //     .style("fill", "none")
+            //     .style("pointer-events", "all")
+            //     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+            //     .call(zoom);
             // now the user can zoom and it will trigger the function called updateChart
             
             // A function that updates the chart when the user zoom and thus new boundaries are available
-            function updateChart() {
+            // function updateChart() {
             
-                // recover the new scale
-                var newX = d3.event.transform.rescaleX(x);
-                var newY = d3.event.transform.rescaleY(y);
+            //     // recover the new scale
+            //     var newX = d3.event.transform.rescaleX(x);
+            //     var newY = d3.event.transform.rescaleY(y);
             
-                // update axes with these new boundaries
-                xAxis.call(d3.axisBottom(newX))
-                yAxis.call(d3.axisLeft(newY))
+            //     // update axes with these new boundaries
+            //     xAxis.call(d3.axisBottom(newX))
+            //     yAxis.call(d3.axisLeft(newY))
             
-                // update circle position
-                scatter
-                .selectAll("circle")
-                .attr('cx', function(d) {return newX(d.Sepal_Length)})
-                .attr('cy', function(d) {return newY(d.Petal_Length)});
-            }
+            //     // update circle position
+            //     scatter
+            //     .selectAll("circle")
+            //     .attr('cx', function(d) {return newX(d.Sepal_Length)})
+            //     .attr('cy', function(d) {return newY(d.Petal_Length)});
+            // }
     
         })
     }) 
