@@ -29,6 +29,11 @@
             var xAxis = SVG.append("g")
                 .attr("transform", "translate(0," + height + ")")
                 .call(d3.axisBottom(x));
+
+            xAxis
+                .append('g')
+                .attr('class', 'grid')
+                .call(d3.axisBottom(x).ticks(5).tickSize(-height).tickFormat(''));
             
             // Add Y axis
             var y = d3.scaleLinear()
@@ -36,6 +41,17 @@
                 .range([ height, 0]);
             var yAxis = SVG.append("g")
                 .call(d3.axisLeft(y));
+
+            yAxis
+                .append('g')
+                .attr('class', 'grid')
+                .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(''));
+
+            // Add gridlines styling
+            SVG.selectAll('.grid line')
+                .style('stroke', 'lightgrey') //stroke lines
+                .style('stroke-opacity', 0.7)
+                .style('shape-rendering', 'crispEdges');
             
             // Add a clipPath: everything out of this area won't be drawn.
             var clip = SVG.append("defs").append("SVG:clipPath")
@@ -102,11 +118,7 @@
 </script>
 
 <main>
-    <!-- <canvas id="myChart"></canvas> -->
-    <!-- Load d3.js -->
     <script src="https://d3js.org/d3.v4.js"></script>
-
-    <!-- Create a div where the circle will take place -->
     <div id="dataviz_axisZoom"></div>
 </main> 
   
