@@ -1,6 +1,8 @@
 <script>
   import Graph from '../components/Graph.svelte'
   import Polynomial from 'polynomial';
+  import * as d3 from 'd3';
+
   
   let poly;
   function validatePoly() {

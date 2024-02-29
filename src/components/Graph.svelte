@@ -1,79 +1,122 @@
 <script>
-  import { onMount } from 'svelte';
+    import * as d3 from 'd3';
 
-  let width, height;
-  let xScale, yScale;
-  let svg;
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+        width = 460 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+    
+    // append the SVG object to the body of the page
+    var SVG = d3.select("#dataviz_axisZoom")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+    
+    // //Read the data
+    // d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
+    
+    //   // Add X axis
+    //   var x = d3.scaleLinear()
+    //     .domain([4, 8])
+    //     .range([ 0, width ]);
+    //   var xAxis = SVG.append("g")
+    //     .attr("transform", "translate(0," + height + ")")
+    //     .call(d3.axisBottom(x));
+    
+    //   // Add Y axis
+    //   var y = d3.scaleLinear()
+    //     .domain([0, 9])
+    //     .range([ height, 0]);
+    //   var yAxis = SVG.append("g")
+    //     .call(d3.axisLeft(y));
+    
+    //   // Add a clipPath: everything out of this area won't be drawn.
+    //   var clip = SVG.append("defs").append("SVG:clipPath")
+    //       .attr("id", "clip")
+    //       .append("SVG:rect")
+    //       .attr("width", width )
+    //       .attr("height", height )
+    //       .attr("x", 0)
+    //       .attr("y", 0);
+    
+    //   // Create the scatter variable: where both the circles and the brush take place
+    //   var scatter = SVG.append('g')
+    //     .attr("clip-path", "url(#clip)")
+    
+    //   // Add circles
+    //   scatter
+    //     .selectAll("circle")
+    //     .data(data)
+    //     .enter()
+    //     .append("circle")
+    //       .attr("cx", function (d) { return x(d.Sepal_Length); } )
+    //       .attr("cy", function (d) { return y(d.Petal_Length); } )
+    //       .attr("r", 8)
+    //       .style("fill", "#61a3a9")
+    //       .style("opacity", 0.5)
+    
+    //   // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
+    //   var zoom = d3.zoom()
+    //       .scaleExtent([.5, 20])  // This control how much you can unzoom (x0.5) and zoom (x20)
+    //       .extent([[0, 0], [width, height]])
+    //       .on("zoom", updateChart);
+    
+    //   // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
+    //   SVG.append("rect")
+    //       .attr("width", width)
+    //       .attr("height", height)
+    //       .style("fill", "none")
+    //       .style("pointer-events", "all")
+    //       .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+    //       .call(zoom);
+    //   // now the user can zoom and it will trigger the function called updateChart
+    
+    //   // A function that updates the chart when the user zoom and thus new boundaries are available
+    //   function updateChart() {
+    
+    //     // recover the new scale
+    //     var newX = d3.event.transform.rescaleX(x);
+    //     var newY = d3.event.transform.rescaleY(y);
+    
+    //     // update axes with these new boundaries
+    //     xAxis.call(d3.axisBottom(newX))
+    //     yAxis.call(d3.axisLeft(newY))
+    
+    //     // update circle position
+    //     scatter
+    //       .selectAll("circle")
+    //       .attr('cx', function(d) {return newX(d.Sepal_Length)})
+    //       .attr('cy', function(d) {return newY(d.Petal_Length)});
+    //   }
+    
+    // })
+    </script>
 
-  onMount(() => {
-    if (typeof window !== 'undefined') {
-      // Set up initial dimensions
-      width = window.innerWidth;
-      height = window.innerHeight;
-
-      // Set up initial scale and translate
-      xScale = d3.scaleLinear().domain([-10, 10]).range([0, width]);
-      yScale = d3.scaleLinear().domain([-10, 10]).range([height, 0]);
-
-      // Initialize zoom behavior
-      const zoom = d3.zoom()
-        .scaleExtent([1, 10])
-        .on("zoom", zoomed);
-
-      // Create SVG container
-      svg = d3.select("#chart")
-        .append("svg")
-        .attr("width", width)
-        .attr("height", height)
-        .call(zoom);
-
-      // Create axes
-      const xAxis = d3.axisBottom(xScale);
-      const yAxis = d3.axisLeft(yScale);
-
-      // Draw axes
-      svg.append("g")
-        .attr("class", "x-axis")
-        .attr("transform", `translate(0, ${height / 2})`)
-        .call(xAxis);
-
-      svg.append("g")
-        .attr("class", "y-axis")
-        .attr("transform", `translate(${width / 2}, 0)`)
-        .call(yAxis);
-
-      // Draw initial points or other content
-      svg.append("circle")
-        .attr("cx", xScale(0))
-        .attr("cy", yScale(0))
-        .attr("r", 5)
-        .attr("fill", "red");
-    }
-  });
-
-  function zoomed(event) {
-    const { transform } = event;
-
-    // Update scales with new transform
-    xScale = transform.rescaleX(xScale);
-    yScale = transform.rescaleY(yScale);
-
-    // Update axes with new scales
-    svg.select(".x-axis").call(d3.axisBottom(xScale));
-    svg.select(".y-axis").call(d3.axisLeft(yScale));
-
-    // Update points or other content with new scales
-    svg.selectAll("circle")
-      .attr("cx", xScale(0))
-      .attr("cy", yScale(0));
-  }
-</script>
-
+<main>
+    <canvas id="myChart"></canvas>
+</main> 
+  
 <style>
-  #chart {
-    width: 100%;
-    height: 100vh;
-  }
-</style>
+    main {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding-top: 5%;
+        padding-bottom: 5%
+    }
 
-<div id="chart"></div>
+    canvas {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #2c3e50; /* Dark background color */
+        padding-top: 10%;
+        margin: 0; /* Remove any margin */
+        padding: 0; /* Remove any padding */
+    }
+</style> 
