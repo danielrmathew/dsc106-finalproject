@@ -15,11 +15,11 @@
     for (let i = 0; i < str.length; i++) {
       if (str[i] === '(') {
         stack.push(str[i]);
-      } else {
-        let last = stack.pop();
-        if (str[i] !== map[last]) {
+      } else if (str[i] === ')'){
+        if (stack.length === 0) {
           return false;
         }
+        let last = stack.pop();
       }
     }
 
@@ -41,6 +41,15 @@
       return false;
     }
 
+    // if there are parentheses, make sure they are valid
+    if (str.includes('(') || str.includes(')')) {
+        const validParentheses = checkValidParentheses(str);
+        if (!validParentheses) {
+          console.log('I failed at valid parentheses');
+          return false;
+        }
+      }
+
     // if the term ends with an operator, it is invalid
     const endsWithOperator = str.match(/(\+|\-|\*\/)$/);
     if (endsWithOperator) {
@@ -60,15 +69,6 @@
       if (!validTerm) {
         console.log('I failed at valid term');
         return false;
-      }
-
-      // if there are parentheses, make sure they are valid
-      if (term.includes('(') || term.includes(')')) {
-        const validParentheses = checkValidParentheses(term);
-        if (!validParentheses) {
-          console.log('I failed at valid parentheses');
-          return false;
-        }
       }
     }
 
@@ -96,6 +96,28 @@
         <input class="input" bind:value={poly} type="text" placeholder="Enter function here" />
         <button on:click={validatePoly} type="submit">Enter</button>
       </div>
+      <center>
+        <div id = 'writeup'>
+          <h1>Prototype Writeup</h1>
+          <br>
+          <p>
+            Our end goal is to create a visualization that teaches calculus fundamentals surrounding the derivative via "scrollytelling". 
+            So far we've layed the ground work for our first 2 pages, and have come together to brainstorm functional features as well as aesthetic choices that we want to execute on. 
+            Users can enter a polynomial with the text box which later sections will use to graph it and its derivatives.
+            We've implemented a function that checks if the polynomial is valid (parentheses, single-variable, no weird characters, etc.) and if so, creates a Polynomial object from the input using the Polynomial.js package.
+            The Polynomial objects are useful because of the in-built methods that allow us to calculate the derivative of the polynomial.
+            Upon scrolldown, the webpage snaps to the second section of the visualization.
+            The second page has a graph that will display the polynomial and its derivative(s) as the user scrolls down. We want to add to add features like animating the lines being drawn however our main priority as of now is functionality.
+          </p>
+          <br>
+          <p>
+            The biggest hurdle we've faced so far is implementing the graph with the level of interactivity we're hoping for.
+            Our idea was to make the graph have 4 quadrants and take up the entire page, allowing the user to pan and zoom in on the graph after it's finished drawing.
+            We've managed to get a basic graph with zoom + panning capabilities but there are not many examples of the kind of immersive graph we want.
+            However, we're confident that with some time we'll be able to implement the graph we're envisioning. 
+            There are some JavaScript and Svelte elements that may prove challenging but we've found a lot of resources and examples that we can use to guide us.
+        </div>
+      </center>
     </section>
     <section class="chart">
       <Graph />
@@ -109,6 +131,11 @@
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+  }
+
+  #writeup {
+    margin-top: 50px;
+    width: 1000px;
   }
 
   :global(body) {
