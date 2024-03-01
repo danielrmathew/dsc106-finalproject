@@ -1,14 +1,31 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
+    import Polynomial from 'polynomial';
 
-    var data = [
+    const data = [
                 { x: 10, y: 10},
                 { x: 5, y: 4 },
                 { x: 2, y: 3 },
                 { x: 0, y: 0},
                 { x: -1, y: -1},   
             ];
+
+    let poly_data = [];
+    const poly = new Polynomial("x^2");
+
+    const domain = d3.range(10)
+    const test_map = {1: 2, 3: 4, 5: 6};
+    for (let poly_x in test_map) {
+        console.log(poly_x + " " + test_map[poly_x]);
+    }
+
+    for (let i = 0; i < domain.length; i++) {
+        let poly_y;
+        // for (let j = 0; )
+
+    }
+    
 
     onMount(() => {
         // set the dimensions and margins of the graph
@@ -102,9 +119,9 @@
             
             // update line position
             var newLine = d3.line()
-            .x(function(d) { return newX(d.x); })
-            .y(function(d) { return newY(d.y); })
-            .curve(d3.curveMonotoneX);
+                .x(function(d) { return newX(d.x); })
+                .y(function(d) { return newY(d.y); })
+                .curve(d3.curveMonotoneX);
 
             SVG.select('.line')
                 .attr("d", newLine);
@@ -153,9 +170,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        /* background-color: #2c3e50; Dark background color */
+        background-color: #2c3e50; /* Dark background color */
         padding-top: 10%;
         margin: 0; /* Remove any margin */
         padding: 0; /* Remove any padding */
-    }
+    } 
 </style> 
