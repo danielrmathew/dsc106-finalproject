@@ -1,6 +1,8 @@
 <script>
   import Graph from '../components/Graph.svelte'
   import Polynomial from 'polynomial';
+  import { validPolyAvail, polyFunction } from '../lib/store.js'
+  // import {updatePoly} from '../components/Graph.svelte'
   // import * as d3 from 'd3';
 
   
@@ -59,7 +61,7 @@
 
     const terms = str.match(/(\+|\-|\*\/)?[a-z0-9.^]+/gi);
 
-    console.log(terms);
+    console.log("Terms: " + terms);
 
     for (let i = 0; i < terms.length; i++) {
       const term = terms[i];
@@ -78,8 +80,11 @@
   function validatePoly() {
     if (isValidPolynomial(poly)) {
       console.log('Valid polynomial');
-      var p = new Polynomial(poly);
-      console.log(p);
+      // var p = new Polynomial(poly);
+      // console.log(p);
+      // console.log('Poly value:', poly);
+      polyFunction.set(poly);
+      validPolyAvail.set(true);
     } else {
       console.log('Invalid polynomial');
     }

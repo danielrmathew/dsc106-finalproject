@@ -1,30 +1,40 @@
 <script>
     import { onMount } from 'svelte';
+    import { writable } from 'svelte/store';
     import * as d3 from 'd3';
     import Polynomial from 'polynomial';
+    import { validPolyAvail, polyFunction } from '../lib/store.js'
+    // export function updatePoly(poly){
+    //     console.log(poly);
+    // }
 
-    const data = [
-                { x: 10, y: 10},
-                { x: 5, y: 4 },
-                { x: 2, y: 3 },
-                { x: 0, y: 0},
-                { x: -1, y: -1},   
-            ];
 
-    let poly_data = [];
-    const poly = new Polynomial("x^2");
+    // const data = [
+    //             { x: 10, y: 10},
+    //             { x: 5, y: 4 },
+    //             { x: 2, y: 3 },
+    //             { x: 0, y: 0},
+    //             { x: -1, y: -1},   
+    //         ];
 
-    const domain = d3.range(10)
-    const test_map = {1: 2, 3: 4, 5: 6};
-    for (let poly_x in test_map) {
-        console.log(poly_x + " " + test_map[poly_x]);
-    }
+    // let poly_data = [];
+    
 
-    for (let i = 0; i < domain.length; i++) {
-        let poly_y;
-        // for (let j = 0; )
+    // const domain = d3.range(10)
+    // const test_map = {1: 2, 3: 4, 5: 6};
+    // for (let poly_x in test_map) {
+    //     // console.log(poly_x + " " + test_map[poly_x]);
+    // }
 
-    }
+    // for (let i = 0; i < domain.length; i++) {
+    //     let poly_y;
+    //     // for (let j = 0; )
+
+    // }
+
+    // console.log('poly = ' + poly);
+
+    let poly;
     
 
     onMount(() => {
@@ -83,20 +93,52 @@
             .attr("y", 0);
 
         // Add line
-        var line = d3.line()
-            .x(function(d) { return x(d.x); })
-            .y(function(d) { return y(d.y); })
-            .curve(d3.curveMonotoneX);
+        // var line = d3.line()
+        //     .x(function(d) { return x(d.x); })
+        //     .y(function(d) { return y(d.y); })
+        //     .curve(d3.curveMonotoneX);
 
-        SVG.append("path")
-            .datum(data)
-            .attr("fill", "none")
-            .attr("stroke", "#61a3a9")
-            .attr("stroke-width", 2)
-            .attr("class", "line")
-            .attr("d", line)
-            .attr("clip-path", "url(#clip)");
+        // SVG.append("path")
+        //     .datum(data)
+        //     .attr("fill", "none")
+        //     .attr("stroke", "#61a3a9")
+        //     .attr("stroke-width", 2)
+        //     .attr("class", "line")
+        //     .attr("d", line)
+        //     .attr("clip-path", "url(#clip)");
 
+        // add poly line
+        const drawPoly = validPolyAvail.subscribe(value => {
+            if (value) {
+                polyFunction.subscribe(funcVal => {
+                    poly = funcVal;
+                });
+                console.log('Poly String');
+                console.log(poly);
+                const polyFunc = new Polynomial(poly);
+                const xValues = d3.range(10);
+                const polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
+                console.log('Poly Data:')
+                console.log(polyData);
+                var xExample = 2;
+                console.log('example x= ' + xExample, ' y = ' + polyFunc.eval(xExample));
+
+                var polyLine = d3.line()
+                    .x(d => x(Object.keys(d)[0]))
+                    .y(d => y(Object.values(d)[0]))
+                    .curve(d3.curveMonotoneX);
+
+                SVG.append("path")
+                    .datum(polyData)
+                    .attr("fill", "none")
+                    .attr("stroke", "red")
+                    .attr("stroke-width", 2)
+                    .attr("class", "poly-line")
+                    .attr("d", polyLine);
+            } else {
+                console.log("if False print here: " + value);
+            }
+        });
         
         // Apply clip path to the line
         // SVG.select("path").attr("clip-path", "url(#clip)");
@@ -116,6 +158,13 @@
             // update axes with these new boundaries
             xAxis.call(d3.axisBottom(newX));
             yAxis.call(d3.axisLeft(newY));
+
+            // Update gridlines -- tried to
+            SVG.selectAll('.grid line')
+                .attr('x1', newX.range()[0])
+                .attr('x2', newX.range()[1])
+                .attr('y1', newY.range()[0])
+                .attr('y2', newY.range()[1]);
             
             // update line position
             var newLine = d3.line()
@@ -144,8 +193,7 @@
             .call(zoom);
         // now the user can zoom and it will trigger the function called updateChart
             
-    
-        // })
+        // return () => unsubscribe();
     }) 
     
 </script>
@@ -164,15 +212,4 @@
         padding-bottom: 5%
     }
 
-    canvas {
-        position: relative;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #2c3e50; /* Dark background color */
-        padding-top: 10%;
-        margin: 0; /* Remove any margin */
-        padding: 0; /* Remove any padding */
-    } 
 </style> 
