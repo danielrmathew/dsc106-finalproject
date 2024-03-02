@@ -107,7 +107,7 @@
           <br>
           <p>
             Our end goal is to create a visualization that teaches calculus fundamentals surrounding the derivative via "scrollytelling". 
-            So far we've layed the ground work for our first 2 pages, and have come together to brainstorm functional features as well as aesthetic choices that we want to execute on. 
+            So far we've laid the ground work for our first 2 pages, and have come together to brainstorm functional features as well as aesthetic choices that we want to execute on. 
             Users can enter a polynomial with the text box which later sections will use to graph it and its derivatives.
             We've implemented a function that checks if the polynomial is valid (parentheses, single-variable, no weird characters, etc.) and if so, creates a Polynomial object from the input using the Polynomial.js package.
             The Polynomial objects are useful because of the in-built methods that allow us to calculate the derivative of the polynomial.
@@ -125,7 +125,9 @@
       </center>
     </section>
     <section class="chart">
-      <Graph />
+      <div class="Graph">
+        <Graph />
+      </div>
     </section>
   </div>
 </main>
@@ -136,6 +138,16 @@
     padding: 0;
     box-sizing: border-box;
     font-family: sans-serif;
+  }
+
+  .Graph {
+    /* center the graph */
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+
+    top: 10%;
   }
 
   #writeup {
