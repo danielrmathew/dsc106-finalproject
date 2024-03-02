@@ -130,6 +130,7 @@
 
                 SVG.append("path")
                     .datum(polyData)
+                    .attr("clip-path", "url(#clip)")
                     .attr("fill", "none")
                     .attr("stroke", "red")
                     .attr("stroke-width", 2)
@@ -167,13 +168,18 @@
                 .attr('y2', newY.range()[1]);
             
             // update line position
-            var newLine = d3.line()
-                .x(function(d) { return newX(d.x); })
-                .y(function(d) { return newY(d.y); })
+            var polyFunc = new Polynomial(poly);
+            var xValues = d3.range(10);
+            var polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
+
+            var polyLine = d3.line()
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
 
-            SVG.select('.line')
-                .attr("d", newLine);
+            // Select and update the existing polynomial line
+            SVG.select('.poly-line')
+                .attr("d", polyLine);
 
         }
         
