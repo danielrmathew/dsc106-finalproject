@@ -96,7 +96,7 @@
 <main>
   <div class="container">
     <section class="one">
-      <h1>Hello! Input your favorite function!</h1>
+      <h1 class="heading">Hello! Input your favorite function!</h1>
       <div>
         <input class="input" bind:value={poly} type="text" placeholder="Enter function here" />
         <button on:click={validatePoly} type="submit">Enter</button>
@@ -177,6 +177,10 @@
   }
 
   .input {
+    margin-top: 10px;
+  }
+
+  .heading {
     margin-top: 10px;
   }
 </style>

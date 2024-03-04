@@ -7,33 +7,7 @@
     // export function updatePoly(poly){
     //     console.log(poly);
     // }
-
-
-    // const data = [
-    //             { x: 10, y: 10},
-    //             { x: 5, y: 4 },
-    //             { x: 2, y: 3 },
-    //             { x: 0, y: 0},
-    //             { x: -1, y: -1},   
-    //         ];
-
-    // let poly_data = [];
     
-
-    // const domain = d3.range(10)
-    // const test_map = {1: 2, 3: 4, 5: 6};
-    // for (let poly_x in test_map) {
-    //     // console.log(poly_x + " " + test_map[poly_x]);
-    // }
-
-    // for (let i = 0; i < domain.length; i++) {
-    //     let poly_y;
-    //     // for (let j = 0; )
-
-    // }
-
-    // console.log('poly = ' + poly);
-
     let poly;
     
 
@@ -112,20 +86,6 @@
             .attr("x", 0)
             .attr("y", 0);
 
-        // Add line
-        // var line = d3.line()
-        //     .x(function(d) { return x(d.x); })
-        //     .y(function(d) { return y(d.y); })
-        //     .curve(d3.curveMonotoneX);
-
-        // SVG.append("path")
-        //     .datum(data)
-        //     .attr("fill", "none")
-        //     .attr("stroke", "#61a3a9")
-        //     .attr("stroke-width", 2)
-        //     .attr("class", "line")
-        //     .attr("d", line)
-        //     .attr("clip-path", "url(#clip)");
 
         // add poly line
         const drawPoly = validPolyAvail.subscribe(value => {
@@ -136,7 +96,7 @@
                 console.log('Poly String');
                 console.log(poly);
                 const polyFunc = new Polynomial(poly);
-                const xValues = d3.range(-10, 10);
+                const xValues = d3.range(-10, 11);
                 const polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
                 console.log('Poly Data:')
                 console.log(polyData);
@@ -175,6 +135,8 @@
             // recover the new scale
             var newX = event.transform.rescaleX(x);
             var newY = event.transform.rescaleY(y);
+            let x_domain = newX.domain();
+            // console.log(newX.domain());
         
             // update axes with these new boundaries
             xAxis.call(d3.axisBottom(newX));
@@ -185,8 +147,9 @@
                 
             // update line position
             var polyFunc = new Polynomial(poly);
-            var xValues = d3.range(-10, 10);
+            var xValues = d3.range(x_domain[0], x_domain[1]+1);
             var polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
+            console.log(polyData);
 
             var polyLine = d3.line()
                 .x(d => newX(Object.keys(d)[0]))
@@ -195,6 +158,7 @@
 
             // Select and update the existing polynomial line
             SVG.select('.poly-line')
+                .datum(polyData)
                 .attr("d", polyLine);
 
         }
