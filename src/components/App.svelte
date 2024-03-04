@@ -95,37 +95,17 @@
 
 <main>
   <div class="container">
-    <section class="one">
-      <h1 class="heading">Hello! Input your favorite function!</h1>
-      <div>
-        <input class="input" bind:value={poly} type="text" placeholder="Enter function here" />
-        <button on:click={validatePoly} type="submit">Enter</button>
-      </div>
-      <center>
-        <div id = 'writeup'>
-          <h1>Prototype Writeup</h1>
-          <br>
-          <p>
-            Our end goal is to create a visualization that teaches calculus fundamentals surrounding the derivative via "scrollytelling". 
-            So far we've laid the ground work for our first 2 pages, and have come together to brainstorm functional features as well as aesthetic choices that we want to execute on. 
-            Users can enter a polynomial with the text box which later sections will use to graph it and its derivatives.
-            We've implemented a function that checks if the polynomial is valid (parentheses, single-variable, no weird characters, etc.) and if so, creates a Polynomial object from the input using the Polynomial.js package.
-            The Polynomial objects are useful because of the in-built methods that allow us to calculate the derivative of the polynomial.
-            Upon scrolldown, the webpage snaps to the second section of the visualization.
-            The second page has a graph that will display the polynomial and its derivative(s) as the user scrolls down. We want to add to add features like animating the lines being drawn however our main priority as of now is functionality.
-          </p>
-          <br>
-          <p>
-            The biggest hurdle we've faced so far is implementing the graph with the level of interactivity we're hoping for.
-            Our idea was to make the graph have 4 quadrants and take up the entire page, allowing the user to pan and zoom in on the graph after it's finished drawing.
-            We've managed to get a basic graph with zoom + panning capabilities but there are not many examples of the kind of immersive graph we want.
-            However, we're confident that with some time we'll be able to implement the graph we're envisioning. 
-            There are some JavaScript and Svelte elements that may prove challenging but we've found a lot of resources and examples that we can use to guide us.
+    <section id="intro">
+      <div id="intro-div">
+        <h1 id="heading">Hello! Input your favorite polynomial function!</h1>
+        <div>
+          <input id="input" bind:value={poly} type="text" placeholder="Enter function here" />
+          <button on:click={validatePoly} type="submit">Enter</button>
         </div>
-      </center>
+      </div>
     </section>
-    <section class="chart">
-      <div class="Graph">
+    <section id="chart">
+      <div id="Graph">
         <Graph />
       </div>
     </section>
@@ -140,24 +120,15 @@
     font-family: sans-serif;
   }
 
-  .Graph {
-    /* center the graph */
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-
-    top: 10%;
-  }
-
-  #writeup {
-    margin-top: 50px;
-    width: 1000px;
-  }
-
   :global(body) {
     margin: 0;
     padding: 0;
+  }
+
+  .container {
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+    height: 100vh;
   }
 
   section {
@@ -169,18 +140,34 @@
     padding: 0;
     border-style: solid;
   }
-  
-  .container {
-    scroll-snap-type: y mandatory;
-    overflow-y: scroll;
-    height: 100vh;
+
+  #intro {
+    background-color: rgba(255,255,255,0.5);
+    background-image: url('intro-background.jpg'); /* would prefer this file to be in assets but it doesn't work there for some reason, so has to be in components*/
+    background-blend-mode: lighten;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
-  .input {
+  #heading {
     margin-top: 10px;
+    font-size: xx-large;
   }
 
-  .heading {
-    margin-top: 10px;
+  #input {
+    margin-top: 15px;
   }
+
+  #Graph {
+    /* center the graph */
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    top: 10%;
+  }
+
 </style>
