@@ -9,7 +9,6 @@
     // }
     
     let poly;
-    
 
     onMount(() => {
 
@@ -96,7 +95,14 @@
                 console.log('Poly String');
                 console.log(poly);
                 const polyFunc = new Polynomial(poly);
-                const xValues = d3.range(-10, 11);
+
+                const first_derivative = polyFunc.derive(1);
+                console.log('First Derivative: ' + first_derivative);
+
+                const second_derivative = first_derivative.derive(1);
+                console.log('Second Derivative: ' + second_derivative);
+
+                const xValues = d3.range(-10, 11, 0.1);
                 const polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
                 console.log('Poly Data:')
                 console.log(polyData);
@@ -108,6 +114,7 @@
                     .y(d => y(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
 
+
                 SVG.append("path")
                     .datum(polyData)
                     .attr("clip-path", "url(#clip)")
@@ -116,11 +123,75 @@
                     .attr("stroke-width", 2)
                     .attr("class", "poly-line")
                     .attr("d", polyLine);
+
+                var totalLength = SVG.select('.poly-line').node().getTotalLength();
+                console.log(totalLength);
+                SVG.select('.poly-line')
+                    .attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(5000)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+
+                // Add the first derivative line
+                const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
+                var firstDerivativeLine = d3.line()
+                    .x(d => x(Object.keys(d)[0]))
+                    .y(d => y(Object.values(d)[0]))
+                    .curve(d3.curveMonotoneX);
+                
+                SVG.append("path")
+                    .datum(firstDerivativeData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 2)
+                    .attr("class", "first-derivative-line")
+                    .attr("d", firstDerivativeLine);
+                
+                var totalLength = SVG.select('.first-derivative-line').node().getTotalLength();
+                console.log(totalLength);
+                SVG.select('.first-derivative-line')
+                    .attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(5000)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+                
+                // Add the second derivative line
+                const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
+                var secondDerivativeLine = d3.line()
+                    .x(d => x(Object.keys(d)[0]))
+                    .y(d => y(Object.values(d)[0]))
+                    .curve(d3.curveMonotoneX);
+                
+                SVG.append("path")
+                    .datum(secondDerivativeData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "green")
+                    .attr("stroke-width", 2)
+                    .attr("class", "second-derivative-line")
+                    .attr("d", secondDerivativeLine);
+                
+                var totalLength = SVG.select('.second-derivative-line').node().getTotalLength();
+                console.log(totalLength);
+                SVG.select('.second-derivative-line')
+                    .attr("stroke-dasharray", totalLength + " " + totalLength)
+                    .attr("stroke-dashoffset", totalLength)
+                    .transition()
+                    .duration(5000)
+                    .ease(d3.easeLinear)
+                    .attr("stroke-dashoffset", 0);
+                
+                
             } else {
                 console.log("if False print here: " + value);
             }
         });
-        
+
         // Apply clip path to the line
         // SVG.select("path").attr("clip-path", "url(#clip)");
 
@@ -147,9 +218,8 @@
                 
             // update line position
             var polyFunc = new Polynomial(poly);
-            var xValues = d3.range(x_domain[0], x_domain[1]+1);
+            var xValues = d3.range(x_domain[0], x_domain[1]+1, 0.1);
             var polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
-            console.log(polyData);
 
             var polyLine = d3.line()
                 .x(d => newX(Object.keys(d)[0]))
@@ -159,7 +229,35 @@
             // Select and update the existing polynomial line
             SVG.select('.poly-line')
                 .datum(polyData)
+                .attr("stroke-dasharray", 0)
                 .attr("d", polyLine);
+            
+            // Update the first derivative line
+            
+            const first_derivative = polyFunc.derive(1);
+            const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
+            var firstDerivativeLine = d3.line()
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+            
+            SVG.select('.first-derivative-line')
+                .datum(firstDerivativeData)
+                .attr("stroke-dasharray", 0)
+                .attr("d", firstDerivativeLine);
+            
+            // Update the second derivative line
+            const second_derivative = first_derivative.derive(1);
+            const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
+            var secondDerivativeLine = d3.line()
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+            
+            SVG.select('.second-derivative-line')
+                .datum(secondDerivativeData)
+                .attr("stroke-dasharray", 0)
+                .attr("d", secondDerivativeLine);
 
         }
         

@@ -77,6 +77,13 @@
     return true;
 }
 
+function scrollToSection(sectionId) {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
   function validatePoly() {
     if (isValidPolynomial(poly)) {
       console.log('Valid polynomial');
@@ -85,6 +92,7 @@
       // console.log('Poly value:', poly);
       polyFunction.set(poly);
       validPolyAvail.set(true);
+      scrollToSection('chart');
     } else {
       console.log('Invalid polynomial');
     }
@@ -123,6 +131,11 @@
   :global(body) {
     margin: 0;
     padding: 0;
+  }
+
+  #input {
+    height:60px;
+    font-size:22pt;
   }
 
   .container {
