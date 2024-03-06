@@ -4,9 +4,8 @@
     import * as d3 from 'd3';
     import Polynomial from 'polynomial';
     import { validPolyAvail, polyFunction } from '../lib/store.js'
-    // export function updatePoly(poly){
-    //     console.log(poly);
-    // }
+    import * as math from 'mathjs';
+    import { parse } from 'svelte/compiler';
     
     let poly;
 
@@ -92,24 +91,38 @@
                 polyFunction.subscribe(funcVal => {
                     poly = funcVal;
                 });
-                console.log('Poly String');
-                console.log(poly);
+                
+                // testing math.js
+                const parser = math.parser();
+                // parser.evaluate(poly);
+                parser.evaluate(`f(x) = ${poly}`);
+
+                // throws an error if a function is undefined or if the syntax throws an error
+                // can use a try catch block to check for input error instead of what we have rn
+                // console.log(parser.evaluate("si(2)"));
+
+                // first derivative using math.js
+                
+                const math_first = math.string(math.derivative(poly, 'x'));
+                parser.evaluate(`g(x) = ${math_first}`);
+
+                const math_second = math.string(math.derivative(math_first, 'x'));
+                parser.evaluate(`h(x) = ${math_second}`);
+                
                 const polyFunc = new Polynomial(poly);
 
                 const first_derivative = polyFunc.derive(1);
-                console.log('First Derivative: ' + first_derivative);
+                // console.log('First Derivative: ' + first_derivative);
 
                 const second_derivative = first_derivative.derive(1);
-                console.log('Second Derivative: ' + second_derivative);
+                // console.log('Second Derivative: ' + second_derivative);
 
                 const xValues = d3.range(-10, 11, 0.1);
-                const polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
-                console.log('Poly Data:')
-                console.log(polyData);
-                var xExample = 2;
-                console.log('example x= ' + xExample, ' y = ' + polyFunc.eval(xExample));
+                // const polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
+                const polyData = xValues.map(x => ({ [x]: parser.evaluate(`f(${x})`) }));
+                // console.log('example x= ' + xExample, ' y = ' + polyFunc.eval(xExample));
 
-                var polyLine = d3.line()
+                const polyLine = d3.line()
                     .x(d => x(Object.keys(d)[0]))
                     .y(d => y(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
@@ -125,17 +138,18 @@
                     .attr("d", polyLine);
 
                 var totalLength = SVG.select('.poly-line').node().getTotalLength();
-                console.log(totalLength);
+                // console.log(totalLength);
                 SVG.select('.poly-line')
                     .attr("stroke-dasharray", totalLength + " " + totalLength)
                     .attr("stroke-dashoffset", totalLength)
                     .transition()
-                    .duration(5000)
+                    .duration(2500)
                     .ease(d3.easeLinear)
                     .attr("stroke-dashoffset", 0);
 
                 // Add the first derivative line
-                const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
+                // const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
+                const firstDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`g(${x})`) }));
                 var firstDerivativeLine = d3.line()
                     .x(d => x(Object.keys(d)[0]))
                     .y(d => y(Object.values(d)[0]))
@@ -151,17 +165,18 @@
                     .attr("d", firstDerivativeLine);
                 
                 var totalLength = SVG.select('.first-derivative-line').node().getTotalLength();
-                console.log(totalLength);
+                // console.log(totalLength);
                 SVG.select('.first-derivative-line')
                     .attr("stroke-dasharray", totalLength + " " + totalLength)
                     .attr("stroke-dashoffset", totalLength)
                     .transition()
-                    .duration(5000)
+                    .duration(2500)
                     .ease(d3.easeLinear)
                     .attr("stroke-dashoffset", 0);
                 
                 // Add the second derivative line
-                const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
+                // const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
+                const secondDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`h(${x})`) }));
                 var secondDerivativeLine = d3.line()
                     .x(d => x(Object.keys(d)[0]))
                     .y(d => y(Object.values(d)[0]))
@@ -177,12 +192,12 @@
                     .attr("d", secondDerivativeLine);
                 
                 var totalLength = SVG.select('.second-derivative-line').node().getTotalLength();
-                console.log(totalLength);
+                // console.log(totalLength);
                 SVG.select('.second-derivative-line')
                     .attr("stroke-dasharray", totalLength + " " + totalLength)
                     .attr("stroke-dashoffset", totalLength)
                     .transition()
-                    .duration(5000)
+                    .duration(2500)
                     .ease(d3.easeLinear)
                     .attr("stroke-dashoffset", 0);
                 
@@ -192,21 +207,13 @@
             }
         });
 
-        // Apply clip path to the line
-        // SVG.select("path").attr("clip-path", "url(#clip)");
-
-        
-        // Create the scatter variable: where both the circles and the brush take place
-        // var scatter = SVG.append('g')
-        //     .attr("clip-path", "url(#clip)")
-
         // A function that updates the chart when the user zoom and thus new boundaries are available
         function updateChart(event) {
         
             // recover the new scale
-            var newX = event.transform.rescaleX(x);
-            var newY = event.transform.rescaleY(y);
-            let x_domain = newX.domain();
+            const newX = event.transform.rescaleX(x);
+            const newY = event.transform.rescaleY(y);
+            const x_domain = newX.domain();
             // console.log(newX.domain());
         
             // update axes with these new boundaries
@@ -217,9 +224,11 @@
             createGridlines(SVG, newX, newY, height, width);
                 
             // update line position
-            var polyFunc = new Polynomial(poly);
-            var xValues = d3.range(x_domain[0], x_domain[1]+1, 0.1);
-            var polyData = xValues.map(x => ({ [x]: polyFunc.eval(x) }));
+            // var polyFunc = new Polynomial(poly);
+            const parser = math.parser();
+            parser.evaluate(`f(x) = ${poly}`)
+            const xValues = d3.range(x_domain[0], x_domain[1]+1, 0.1);
+            const polyData = xValues.map(x => ({ [x]: parser.evaluate(`f(${x})`) }));
 
             var polyLine = d3.line()
                 .x(d => newX(Object.keys(d)[0]))
@@ -232,11 +241,16 @@
                 .attr("stroke-dasharray", 0)
                 .attr("d", polyLine);
             
-            // Update the first derivative line
+            // Update the first and second derivative lines
+            const math_first = math.string(math.derivative(poly, 'x'));
+            parser.evaluate(`g(x) = ${math_first}`);
+
+            const math_second = math.string(math.derivative(math_first, 'x'));
+            parser.evaluate(`h(x) = ${math_second}`);
+            // const first_derivative = polyFunc.derive(1);
             
-            const first_derivative = polyFunc.derive(1);
-            const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
-            var firstDerivativeLine = d3.line()
+            const firstDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`g(${x})`) }));
+            const firstDerivativeLine = d3.line()
                 .x(d => newX(Object.keys(d)[0]))
                 .y(d => newY(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
@@ -247,9 +261,9 @@
                 .attr("d", firstDerivativeLine);
             
             // Update the second derivative line
-            const second_derivative = first_derivative.derive(1);
-            const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
-            var secondDerivativeLine = d3.line()
+            // const second_derivative = first_derivative.derive(1);
+            const secondDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`h(${x})`) }));
+            const secondDerivativeLine = d3.line()
                 .x(d => newX(Object.keys(d)[0]))
                 .y(d => newY(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
