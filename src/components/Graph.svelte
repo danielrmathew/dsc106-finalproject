@@ -128,14 +128,80 @@
                     .curve(d3.curveMonotoneX);
 
 
+                // TOOL TIP
+                var tooltip = d3.select("#graph")
+                    .append("div")
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px");
+
+                var valueTooltip = d3.select("#graph")
+                    .append("div")
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px")
+
+
+                function showTooltip(event, lineName) {
+                    const [x, y] = d3.pointer(event);
+                    tooltip.transition().duration(200).style("opacity", 0.9);
+                    tooltip.html(`<strong>${lineName}</strong>`)
+                        .style("left", (x + 10) + "px")
+                        .style("top", (y - 20) + "px");
+                }
+
+                function hideTooltip() {
+                    tooltip.transition().duration(200).style("opacity", 0);
+                }
+
+                function showValueTooltip(event) {
+                    const [x, y] = d3.pointer(event);
+                    const xValue = x;
+                    const yValue = y;
+                    valueTooltip.transition().duration(200).style("opacity", 0.9);
+                    valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`)
+                        .style("left", (x + 10) + "px")
+                        .style("top", (y - 20) + "px");
+                }
+
+                function hideValueTooltip() {
+                    valueTooltip.transition().duration(200).style("opacity", 0);
+                }
+
+
+
                 SVG.append("path")
                     .datum(polyData)
                     .attr("clip-path", "url(#clip)")
                     .attr("fill", "none")
                     .attr("stroke", "red")
-                    .attr("stroke-width", 2)
+                    .attr("stroke-width", 3)
+                    .attr("id", "polyLineTooltip")
                     .attr("class", "poly-line")
-                    .attr("d", polyLine);
+                    .attr("d", polyLine)
+                    .on("mouseover", function (event, d) {
+                        showTooltip(event, "Polynomial Line");
+                        showValueTooltip(event);
+                    })
+                    .on("mousemove", function (event) {
+                        showTooltip(event, "Polynomial Line");
+                        valueTooltip
+                            .html("(" + event.x + ", " + event.y + ")")
+                            .style("left", (event.pageX) + "px")
+                            .style("top", (event.pageY) + "px")
+
+                    })
+                    .on("mouseout", function () {
+                        hideTooltip();
+                    });
 
                 var totalLength = SVG.select('.poly-line').node().getTotalLength();
                 // console.log(totalLength);
@@ -160,7 +226,7 @@
                     .attr("clip-path", "url(#clip)")
                     .attr("fill", "none")
                     .attr("stroke", "blue")
-                    .attr("stroke-width", 2)
+                    .attr("stroke-width", 3)
                     .attr("class", "first-derivative-line")
                     .attr("d", firstDerivativeLine);
                 
@@ -187,7 +253,7 @@
                     .attr("clip-path", "url(#clip)")
                     .attr("fill", "none")
                     .attr("stroke", "green")
-                    .attr("stroke-width", 2)
+                    .attr("stroke-width", 3)
                     .attr("class", "second-derivative-line")
                     .attr("d", secondDerivativeLine);
                 
@@ -199,13 +265,29 @@
                     .transition()
                     .duration(2500)
                     .ease(d3.easeLinear)
-                    .attr("stroke-dashoffset", 0);
-                
+                    .attr("stroke-dashoffset", 0);             
+            
                 
             } else {
                 console.log("if False print here: " + value);
             }
+
+            
+
+
         });
+
+
+        
+
+        // SVG.select('.first-derivative-line')
+        //     .on("mouseover", (event, d) => showTooltip(event, "First Derivative Line"))
+        //     .on("mouseout", hideTooltip);
+
+        // // Add tooltip for second-derivative-line
+        // SVG.select('.second-derivative-line')
+        //     .on("mouseover", (event, d) => showTooltip(event, "Second Derivative Line"))
+        //     .on("mouseout", hideTooltip);
 
         // A function that updates the chart when the user zoom and thus new boundaries are available
         function updateChart(event) {

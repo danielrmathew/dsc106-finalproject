@@ -115,7 +115,7 @@ function scrollToSection(sectionId) {
       <div id="intro-div">
         <h1 id="heading">Hello! Input your favorite polynomial function!</h1>
         <div>
-          <input id="input" bind:value={poly} type="text" placeholder="Enter function here" />
+          <input id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
           <button on:click={validatePoly} type="submit">Enter</button>
         </div>
       </div>
