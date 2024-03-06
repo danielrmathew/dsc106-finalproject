@@ -8,6 +8,8 @@
     import { parse } from 'svelte/compiler';
     
     let poly;
+    let currXScale;
+    let currYScale;
 
     onMount(() => {
 
@@ -48,32 +50,37 @@
                 "translate(" + margin.left + "," + margin.top + ")");
         
         // Add X axis
-        var x = d3.scaleLinear()
+        var initialXScale = d3.scaleLinear()
             .domain([-10, 10])
             .range([ 0, width ]);
         var xAxis = SVG.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(initialXScale));
 
         xAxis
             .append('g')
             .attr('class', 'grid')
-            .call(d3.axisBottom(x).ticks(5).tickSize(-height).tickFormat(''));
+            .call(d3.axisBottom(initialXScale).ticks(5).tickSize(-height).tickFormat(''));
+
+
+        currXScale = initialXScale;
         
         // Add Y axis
-        var y = d3.scaleLinear()
+        var initialYScale = d3.scaleLinear()
             .domain([-20, 20])
             .range([ height, 0]);
         var yAxis = SVG.append("g")
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(initialYScale));
 
         yAxis
             .append('g')
             .attr('class', 'grid')
-            .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(''));
+            .call(d3.axisLeft(initialYScale).ticks(5).tickSize(-width).tickFormat(''));
+
+        currYScale = initialYScale;
 
         // Add gridlines styling
-        createGridlines(SVG, x, y, height, width);
+        createGridlines(SVG, initialXScale, initialYScale, height, width);
         
         // Add a clipPath: everything out of this area won't be drawn.
         var clip = SVG.append("defs").append("SVG:clipPath")
@@ -123,57 +130,53 @@
                 // console.log('example x= ' + xExample, ' y = ' + polyFunc.eval(xExample));
 
                 const polyLine = d3.line()
-                    .x(d => x(Object.keys(d)[0]))
-                    .y(d => y(Object.values(d)[0]))
+                    .x(d => currXScale(Object.keys(d)[0]))
+                    .y(d => currYScale(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
 
 
                 // TOOL TIP
                 var tooltip = d3.select("#graph")
                     .append("div")
-                    .style("opacity", 0)
-                    .attr("class", "tooltip")
-                    .style("background-color", "white")
-                    .style("border", "solid")
-                    .style("border-width", "2px")
-                    .style("border-radius", "5px")
-                    .style("padding", "5px");
+                        .style("opacity", 0)
+                        .attr("class", "tooltip")
+                        .style("background-color", "white")
+                        .style("border", "solid")
+                        .style("border-width", "2px")
+                        .style("border-radius", "5px")
+                        .style("padding", "5px");
 
                 var valueTooltip = d3.select("#graph")
                     .append("div")
-                    .style("opacity", 0)
-                    .attr("class", "tooltip")
-                    .style("background-color", "white")
-                    .style("border", "solid")
-                    .style("border-width", "2px")
-                    .style("border-radius", "5px")
-                    .style("padding", "5px")
+                        .style("opacity", 0)
+                        .attr("class", "tooltip")
+                        .style("background-color", "white")
+                        .style("border", "solid")
+                        .style("border-width", "2px")
+                        .style("border-radius", "5px")
+                        .style("padding", "5px")
 
 
-                function showTooltip(event, lineName) {
+                function showTooltip(event, lineName, xScale, yScale) {
                     const [x, y] = d3.pointer(event);
+
+                    // Convert page coordinates to graph coordinates
+                    const xGraph = xScale.invert(x - margin.left);
+                    const yGraph = yScale.invert(y - margin.top);
+
                     tooltip.transition().duration(200).style("opacity", 0.9);
                     tooltip.html(`<strong>${lineName}</strong>`)
+                        .style("left", (x + 10) + "px")
+                        .style("top", (y - 20) + "px");
+
+                    // Update the tooltip position with graph coordinates
+                    tooltip.html(`<strong>${lineName}</strong><br><strong>X:</strong> ${xGraph.toFixed(2)}<br><strong>Y:</strong> ${yGraph.toFixed(2)}`)
                         .style("left", (x + 10) + "px")
                         .style("top", (y - 20) + "px");
                 }
 
                 function hideTooltip() {
                     tooltip.transition().duration(200).style("opacity", 0);
-                }
-
-                function showValueTooltip(event) {
-                    const [x, y] = d3.pointer(event);
-                    const xValue = x;
-                    const yValue = y;
-                    valueTooltip.transition().duration(200).style("opacity", 0.9);
-                    valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`)
-                        .style("left", (x + 10) + "px")
-                        .style("top", (y - 20) + "px");
-                }
-
-                function hideValueTooltip() {
-                    valueTooltip.transition().duration(200).style("opacity", 0);
                 }
 
 
@@ -188,20 +191,28 @@
                     .attr("class", "poly-line")
                     .attr("d", polyLine)
                     .on("mouseover", function (event, d) {
-                        showTooltip(event, "Polynomial Line");
-                        showValueTooltip(event);
+                        showTooltip(event, "Polynomial Line", currXScale, currYScale);
                     })
-                    .on("mousemove", function (event) {
-                        showTooltip(event, "Polynomial Line");
-                        valueTooltip
-                            .html("(" + event.x + ", " + event.y + ")")
-                            .style("left", (event.pageX) + "px")
-                            .style("top", (event.pageY) + "px")
-
-                    })
-                    .on("mouseout", function () {
-                        hideTooltip();
+                    .on("mousemove", function (event, d) {
+                        showTooltip(event, "Polynomial Line", currXScale, currYScale);
                     });
+
+                    
+                    // .on("mouseover", function (event, d) {
+                    //     showTooltip(event, "Polynomial Line");
+                    //     showValueTooltip(event);
+                    // })
+                    // .on("mousemove", function (event) {
+                    //     showTooltip(event, "Polynomial Line");
+                    //     valueTooltip
+                    //         .html("(" + event.x + ", " + event.y + ")")
+                    //         .style("left", (event.pageX) + "px")
+                    //         .style("top", (event.pageY) + "px")
+
+                    // })
+                    // .on("mouseout", function () {
+                    //     hideTooltip();
+                    // });
 
                 var totalLength = SVG.select('.poly-line').node().getTotalLength();
                 // console.log(totalLength);
@@ -217,8 +228,8 @@
                 // const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
                 const firstDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`g(${x})`) }));
                 var firstDerivativeLine = d3.line()
-                    .x(d => x(Object.keys(d)[0]))
-                    .y(d => y(Object.values(d)[0]))
+                    .x(d => currXScale(Object.keys(d)[0]))
+                    .y(d => currYScale(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
                 
                 SVG.append("path")
@@ -244,8 +255,8 @@
                 // const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
                 const secondDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`h(${x})`) }));
                 var secondDerivativeLine = d3.line()
-                    .x(d => x(Object.keys(d)[0]))
-                    .y(d => y(Object.values(d)[0]))
+                    .x(d => currXScale(Object.keys(d)[0]))
+                    .y(d => currYScale(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
                 
                 SVG.append("path")
@@ -293,17 +304,17 @@
         function updateChart(event) {
         
             // recover the new scale
-            const newX = event.transform.rescaleX(x);
-            const newY = event.transform.rescaleY(y);
-            const x_domain = newX.domain();
+            currXScale = event.transform.rescaleX(currXScale);
+            currYScale = event.transform.rescaleY(currYScale);
+            const x_domain = currXScale.domain();
             // console.log(newX.domain());
         
             // update axes with these new boundaries
-            xAxis.call(d3.axisBottom(newX));
-            yAxis.call(d3.axisLeft(newY));
+            xAxis.call(d3.axisBottom(currXScale));
+            yAxis.call(d3.axisLeft(currYScale));
 
             // update gridlines
-            createGridlines(SVG, newX, newY, height, width);
+            createGridlines(SVG, currXScale, currYScale, height, width);
                 
             // update line position
             // var polyFunc = new Polynomial(poly);
@@ -313,8 +324,8 @@
             const polyData = xValues.map(x => ({ [x]: parser.evaluate(`f(${x})`) }));
 
             var polyLine = d3.line()
-                .x(d => newX(Object.keys(d)[0]))
-                .y(d => newY(Object.values(d)[0]))
+                .x(d => currXScale(Object.keys(d)[0]))
+                .y(d => currYScale(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
 
             // Select and update the existing polynomial line
@@ -333,8 +344,8 @@
             
             const firstDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`g(${x})`) }));
             const firstDerivativeLine = d3.line()
-                .x(d => newX(Object.keys(d)[0]))
-                .y(d => newY(Object.values(d)[0]))
+                .x(d => currXScale(Object.keys(d)[0]))
+                .y(d => currYScale(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
             
             SVG.select('.first-derivative-line')
@@ -346,8 +357,8 @@
             // const second_derivative = first_derivative.derive(1);
             const secondDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`h(${x})`) }));
             const secondDerivativeLine = d3.line()
-                .x(d => newX(Object.keys(d)[0]))
-                .y(d => newY(Object.values(d)[0]))
+                .x(d => currXScale(Object.keys(d)[0]))
+                .y(d => currYScale(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
             
             SVG.select('.second-derivative-line')
