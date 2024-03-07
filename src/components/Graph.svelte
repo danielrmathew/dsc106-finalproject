@@ -221,9 +221,9 @@
                 }
 
                 function showValueTooltip(event) {
-                    const [x, y] = d3.pointer(event);
-                    const xValue = x;
-                    const yValue = y;
+                    const [xPointer, yPointer] = d3.pointer(event);
+                    const xValue = x.invert(xPointer);
+                    const yValue = y.invert(yPointer);
                     valueTooltip.transition().duration(200).style("opacity", 0.9);
                     valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`)
                         .style("left", (x + 10) + "px")
