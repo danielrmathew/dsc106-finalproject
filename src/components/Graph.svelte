@@ -8,8 +8,6 @@
     import { parse } from 'svelte/compiler';
     
     let poly;
-    let currXScale;
-    let currYScale;
 
     onMount(() => {
 
@@ -50,37 +48,32 @@
                 "translate(" + margin.left + "," + margin.top + ")");
         
         // Add X axis
-        var initialXScale = d3.scaleLinear()
+        var x = d3.scaleLinear()
             .domain([-10, 10])
             .range([ 0, width ]);
         var xAxis = SVG.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(initialXScale));
+            .call(d3.axisBottom(x));
 
         xAxis
             .append('g')
             .attr('class', 'grid')
-            .call(d3.axisBottom(initialXScale).ticks(5).tickSize(-height).tickFormat(''));
-
-
-        currXScale = initialXScale;
+            .call(d3.axisBottom(x).ticks(5).tickSize(-height).tickFormat(''));
         
         // Add Y axis
-        var initialYScale = d3.scaleLinear()
+        var y = d3.scaleLinear()
             .domain([-20, 20])
             .range([ height, 0]);
         var yAxis = SVG.append("g")
-            .call(d3.axisLeft(initialYScale));
+            .call(d3.axisLeft(y));
 
         yAxis
             .append('g')
             .attr('class', 'grid')
-            .call(d3.axisLeft(initialYScale).ticks(5).tickSize(-width).tickFormat(''));
-
-        currYScale = initialYScale;
+            .call(d3.axisLeft(y).ticks(5).tickSize(-width).tickFormat(''));
 
         // Add gridlines styling
-        createGridlines(SVG, initialXScale, initialYScale, height, width);
+        createGridlines(SVG, x, y, height, width);
         
         // Add a clipPath: everything out of this area won't be drawn.
         var clip = SVG.append("defs").append("SVG:clipPath")
@@ -130,56 +123,137 @@
                 // console.log('example x= ' + xExample, ' y = ' + polyFunc.eval(xExample));
 
                 const polyLine = d3.line()
-                    .x(d => currXScale(Object.keys(d)[0]))
-                    .y(d => currYScale(Object.values(d)[0]))
+                    .x(d => x(Object.keys(d)[0]))
+                    .y(d => y(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
 
 
                 // TOOL TIP
                 var tooltip = d3.select("#graph")
                     .append("div")
-                        .style("opacity", 0)
-                        .attr("class", "tooltip")
-                        .style("background-color", "white")
-                        .style("border", "solid")
-                        .style("border-width", "2px")
-                        .style("border-radius", "5px")
-                        .style("padding", "5px");
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("width", "100px")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px");
+                
+                // tooltip explaining function's significance
+                var tooltipText = d3.select("#tooltip-text")
+                    .append("div")
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("width", "350px")
+                    .style("right", "0px")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px");
 
                 var valueTooltip = d3.select("#graph")
                     .append("div")
-                        .style("opacity", 0)
-                        .attr("class", "tooltip")
-                        .style("background-color", "white")
-                        .style("border", "solid")
-                        .style("border-width", "2px")
-                        .style("border-radius", "5px")
-                        .style("padding", "5px")
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("width", "100px")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px")
 
 
-                function showTooltip(event, lineName, xScale, yScale) {
+                function showTooltip(event, lineName) {
+                    console.log('showing tooltip');
                     const [x, y] = d3.pointer(event);
-
-                    // Convert page coordinates to graph coordinates
-                    const xGraph = xScale.invert(x - margin.left);
-                    const yGraph = yScale.invert(y - margin.top);
-
                     tooltip.transition().duration(200).style("opacity", 0.9);
                     tooltip.html(`<strong>${lineName}</strong>`)
                         .style("left", (x + 10) + "px")
                         .style("top", (y - 20) + "px");
-
-                    // Update the tooltip position with graph coordinates
-                    tooltip.html(`<strong>${lineName}</strong><br><strong>X:</strong> ${xGraph.toFixed(2)}<br><strong>Y:</strong> ${yGraph.toFixed(2)}`)
-                        .style("left", (x + 10) + "px")
-                        .style("top", (y - 20) + "px");
                 }
+
+                function showSignificanceTooltip(event, lineName) {
+                    console.log('showing tooltip');
+                    const [x, y] = d3.pointer(event);
+                    tooltipText.transition().duration(200).style("opacity", 0.9);
+
+                    if (lineName == 'f(x)') {
+                        tooltipText.html(`<p>This line is f(x).
+                            \nIt represents your original function. Depending on the scenario,
+                            it can describe a variety of different systems.\n
+                            The position of a car on a track at a given time.\n
+                            The amount of money in a bank account.\n
+                            The height of a rocket at a given time.\n</p>`)
+                            .style("left", (x + 10) + "px")
+                            .style("top", (y - 20) + "px");
+                    }
+
+                    else if (lineName == "f'(x)") {
+                        tooltipText.html(`<p>This line is f'(x).
+                            \nIt represents the CHANGE of your original function.\n
+                            If f(x) represents the position of a car on a track at a given time,
+                            f'(x) would represent the car's velocity at that time.\n
+                            </p>`)
+                            .style("left", (x + 10) + "px")
+                            .style("top", (y - 20) + "px");
+                        }
+                    
+                    else if (lineName == "f''(x)") {
+                        tooltipText.html(`<p>This line is f''(x).
+                            \nIt represents the CHANGE of the CHANGE of your original function.\n
+                            If f(x) represents the position of a car on a track at a given time,
+                            f''(x) would represent the car's acceleration at that time.\n
+                            </p>`)
+                            .style("left", (x + 10) + "px")
+                            .style("top", (y - 20) + "px");
+                        }
+                    }
+                
 
                 function hideTooltip() {
                     tooltip.transition().duration(200).style("opacity", 0);
                 }
 
+                function hideSignificanceTooltip() {
+                    tooltipText.transition().duration(200).style("opacity", 0);
+                }
 
+                function showValueTooltip(event) {
+                    const [x, y] = d3.pointer(event);
+                    const xValue = x;
+                    const yValue = y;
+                    valueTooltip.transition().duration(200).style("opacity", 0.9);
+                    valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`)
+                        .style("left", (x + 10) + "px")
+                        .style("top", (y - 20) + "px");
+                }
+
+                function hideValueTooltip() {
+                    valueTooltip.transition().duration(200).style("opacity", 0);
+                }
+
+                // Add invisible line for tooltip
+                SVG.append("path")
+                    .datum(polyData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "red")
+                    .attr("stroke-width", 12)
+                    .attr("opacity", 0)
+                    .attr("class", "invisible-trigger")
+                    .attr("d", polyLine)
+                    .on("mouseover", (event, d) => {
+                        showTooltip(event, "f(x)");
+                        showSignificanceTooltip(event, "f(x)");
+                    })
+                    .on("mousemove", (event, d) => showValueTooltip(event))
+                    .on("mouseout", () => {
+                        hideTooltip();
+                        hideValueTooltip();
+                        hideSignificanceTooltip();
+                    });
 
                 SVG.append("path")
                     .datum(polyData)
@@ -187,32 +261,19 @@
                     .attr("fill", "none")
                     .attr("stroke", "red")
                     .attr("stroke-width", 3)
-                    .attr("id", "polyLineTooltip")
                     .attr("class", "poly-line")
                     .attr("d", polyLine)
-                    .on("mouseover", function (event, d) {
-                        showTooltip(event, "Polynomial Line", currXScale, currYScale);
+                    .on("mouseover", (event, d) => {
+                        showTooltip(event, "f(x)");
+                        showSignificanceTooltip(event, "f(x)");
                     })
-                    .on("mousemove", function (event, d) {
-                        showTooltip(event, "Polynomial Line", currXScale, currYScale);
+                    .on("mousemove", (event, d) => showValueTooltip(event))
+                    .on("mouseout", () => {
+                        hideTooltip();
+                        hideValueTooltip();
+                        hideSignificanceTooltip();
                     });
 
-                    
-                    // .on("mouseover", function (event, d) {
-                    //     showTooltip(event, "Polynomial Line");
-                    //     showValueTooltip(event);
-                    // })
-                    // .on("mousemove", function (event) {
-                    //     showTooltip(event, "Polynomial Line");
-                    //     valueTooltip
-                    //         .html("(" + event.x + ", " + event.y + ")")
-                    //         .style("left", (event.pageX) + "px")
-                    //         .style("top", (event.pageY) + "px")
-
-                    // })
-                    // .on("mouseout", function () {
-                    //     hideTooltip();
-                    // });
 
                 var totalLength = SVG.select('.poly-line').node().getTotalLength();
                 // console.log(totalLength);
@@ -228,9 +289,30 @@
                 // const firstDerivativeData = xValues.map(x => ({ [x]: first_derivative.eval(x) }));
                 const firstDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`g(${x})`) }));
                 var firstDerivativeLine = d3.line()
-                    .x(d => currXScale(Object.keys(d)[0]))
-                    .y(d => currYScale(Object.values(d)[0]))
+                    .x(d => x(Object.keys(d)[0]))
+                    .y(d => y(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
+
+                // Add invisible first derivative line for tooltip
+                SVG.append("path")
+                    .datum(firstDerivativeData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "blue")
+                    .attr("stroke-width", 12)
+                    .attr("opacity", 0)
+                    .attr("class", "invisible-trigger2")
+                    .attr("d", firstDerivativeLine)
+                    .on("mouseover", (event, d) => {
+                        showTooltip(event, "f'(x)");
+                        showSignificanceTooltip(event, "f'(x)");
+                    })
+                    .on("mousemove", (event, d) => showValueTooltip(event))
+                    .on("mouseout", () => {
+                        hideTooltip();
+                        hideValueTooltip();
+                        hideSignificanceTooltip();
+                    });
                 
                 SVG.append("path")
                     .datum(firstDerivativeData)
@@ -239,7 +321,17 @@
                     .attr("stroke", "blue")
                     .attr("stroke-width", 3)
                     .attr("class", "first-derivative-line")
-                    .attr("d", firstDerivativeLine);
+                    .attr("d", firstDerivativeLine)
+                    .on("mouseover", (event, d) => {
+                        showTooltip(event, "f'(x)");
+                        showSignificanceTooltip(event, "f'(x)");
+                    })
+                    .on("mousemove", (event, d) => showValueTooltip(event))
+                    .on("mouseout", () => {
+                        hideTooltip();
+                        hideValueTooltip();
+                        hideSignificanceTooltip();
+                    });
                 
                 var totalLength = SVG.select('.first-derivative-line').node().getTotalLength();
                 // console.log(totalLength);
@@ -255,9 +347,30 @@
                 // const secondDerivativeData = xValues.map(x => ({ [x]: second_derivative.eval(x) }));
                 const secondDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`h(${x})`) }));
                 var secondDerivativeLine = d3.line()
-                    .x(d => currXScale(Object.keys(d)[0]))
-                    .y(d => currYScale(Object.values(d)[0]))
+                    .x(d => x(Object.keys(d)[0]))
+                    .y(d => y(Object.values(d)[0]))
                     .curve(d3.curveMonotoneX);
+
+                // Add invisible second derivative line for tooltip
+                SVG.append("path")
+                    .datum(secondDerivativeData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "green")
+                    .attr("stroke-width", 12)
+                    .attr("opacity", 0)
+                    .attr("class", "invisible-trigger3")
+                    .attr("d", secondDerivativeLine)
+                    .on("mouseover", (event, d) => {
+                        showTooltip(event, "f''(x)");
+                        showSignificanceTooltip(event, "f''(x)");
+                    })
+                    .on("mousemove", (event, d) => showValueTooltip(event))
+                    .on("mouseout", () => {
+                        hideTooltip();
+                        hideValueTooltip();
+                        hideSignificanceTooltip();
+                    });
                 
                 SVG.append("path")
                     .datum(secondDerivativeData)
@@ -266,7 +379,17 @@
                     .attr("stroke", "green")
                     .attr("stroke-width", 3)
                     .attr("class", "second-derivative-line")
-                    .attr("d", secondDerivativeLine);
+                    .attr("d", secondDerivativeLine)
+                    .on("mouseover", (event, d) => {
+                        showTooltip(event, "f''(x)");
+                        showSignificanceTooltip(event, "f''(x)");
+                    })
+                    .on("mousemove", (event, d) => showValueTooltip(event))
+                    .on("mouseout", () => {
+                        hideTooltip();
+                        hideValueTooltip();
+                        hideSignificanceTooltip();
+                    });
                 
                 var totalLength = SVG.select('.second-derivative-line').node().getTotalLength();
                 // console.log(totalLength);
@@ -282,9 +405,6 @@
             } else {
                 console.log("if False print here: " + value);
             }
-
-            
-
 
         });
 
@@ -304,17 +424,17 @@
         function updateChart(event) {
         
             // recover the new scale
-            currXScale = event.transform.rescaleX(currXScale);
-            currYScale = event.transform.rescaleY(currYScale);
-            const x_domain = currXScale.domain();
+            const newX = event.transform.rescaleX(x);
+            const newY = event.transform.rescaleY(y);
+            const x_domain = newX.domain();
             // console.log(newX.domain());
         
             // update axes with these new boundaries
-            xAxis.call(d3.axisBottom(currXScale));
-            yAxis.call(d3.axisLeft(currYScale));
+            xAxis.call(d3.axisBottom(newX));
+            yAxis.call(d3.axisLeft(newY));
 
             // update gridlines
-            createGridlines(SVG, currXScale, currYScale, height, width);
+            createGridlines(SVG, newX, newY, height, width);
                 
             // update line position
             // var polyFunc = new Polynomial(poly);
@@ -324,8 +444,13 @@
             const polyData = xValues.map(x => ({ [x]: parser.evaluate(`f(${x})`) }));
 
             var polyLine = d3.line()
-                .x(d => currXScale(Object.keys(d)[0]))
-                .y(d => currYScale(Object.values(d)[0]))
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+            
+            var invisibleTriggerLine = d3.line()
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
 
             // Select and update the existing polynomial line
@@ -333,6 +458,11 @@
                 .datum(polyData)
                 .attr("stroke-dasharray", 0)
                 .attr("d", polyLine);
+            
+            SVG.select('.invisible-trigger')
+                .datum(polyData)
+                .attr("stroke-dasharray", 0)
+                .attr("d", invisibleTriggerLine);
             
             // Update the first and second derivative lines
             const math_first = math.string(math.derivative(poly, 'x'));
@@ -344,8 +474,13 @@
             
             const firstDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`g(${x})`) }));
             const firstDerivativeLine = d3.line()
-                .x(d => currXScale(Object.keys(d)[0]))
-                .y(d => currYScale(Object.values(d)[0]))
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+            
+            const invisibleTriggerLine2 = d3.line()
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
             
             SVG.select('.first-derivative-line')
@@ -353,18 +488,33 @@
                 .attr("stroke-dasharray", 0)
                 .attr("d", firstDerivativeLine);
             
+            SVG.select('.invisible-trigger2')
+                .datum(firstDerivativeData)
+                .attr("stroke-dasharray", 0)
+                .attr("d", invisibleTriggerLine2);
+            
             // Update the second derivative line
             // const second_derivative = first_derivative.derive(1);
             const secondDerivativeData = xValues.map(x => ({ [x]: parser.evaluate(`h(${x})`) }));
             const secondDerivativeLine = d3.line()
-                .x(d => currXScale(Object.keys(d)[0]))
-                .y(d => currYScale(Object.values(d)[0]))
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+            
+            const invisibleTriggerLine3 = d3.line()
+                .x(d => newX(Object.keys(d)[0]))
+                .y(d => newY(Object.values(d)[0]))
                 .curve(d3.curveMonotoneX);
             
             SVG.select('.second-derivative-line')
                 .datum(secondDerivativeData)
                 .attr("stroke-dasharray", 0)
                 .attr("d", secondDerivativeLine);
+            
+            SVG.select('.invisible-trigger3')
+                .datum(secondDerivativeData)
+                .attr("stroke-dasharray", 0)
+                .attr("d", invisibleTriggerLine3);
 
         }
         
@@ -390,22 +540,31 @@
         // now the user can zoom and it will trigger the function called updateChart
             
         // return () => unsubscribe();
-    }) 
+    })
     
 </script>
 
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
     <div id="graph"></div>
+    <div id="tooltip-text"></div>
 </main> 
   
 <style>
     main {
         position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         height: 100%;
         padding-top: 5%;
         padding-bottom: 5%
     }
 
+    #tooltip-text {
+        position: absolute;
+        top: 15%;
+    }
+ 
 </style> 
