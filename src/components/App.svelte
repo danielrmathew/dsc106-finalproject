@@ -107,14 +107,30 @@ function scrollToSection(sectionId) {
 
     // if (validPoly) {}
   }
+
+  // function mouseInGraph() {
+  //   console.log('Mouse in graph');
+
+  //   // if mouse is in the graph, disable page scrolling
+  //   document.querySelector('#chart').classList.add('disable-scroll');
+  // }
+
+  // function mouseOutGraph() {
+  //   console.log('Mouse out graph');
+
+  //   // if mouse is out of the graph, enable page scrolling
+  //   document.querySelector('#chart').classList.remove('disable-scroll');
+  // }
+
 </script>
 
 <main>
   <div class="container">
     <section id="intro">
       <div id="intro-div">
-        <h1 id="heading">Hello! Input your favorite polynomial function!</h1>
-        <div>
+        <span style="font-size: 50px;">Hello! Input your favorite</span> <span style="font-size: 20px;"> (single variable)</span> <span style="font-size: 50px;"> math function!</span>
+        <div class = 'input_container'>
+          <p id = 'yequals'>y =</p>
           <input id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
           <button on:click={validatePoly} type="submit">Enter</button>
         </div>
@@ -141,9 +157,19 @@ function scrollToSection(sectionId) {
     padding: 0;
   }
 
+  /* .disable-scroll{
+    overflow-y: hidden;
+  } */
+
   #input {
     height:60px;
     font-size:22pt;
+  }
+
+  .input_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .container {
@@ -173,9 +199,10 @@ function scrollToSection(sectionId) {
     align-items: center;
   }
 
-  #heading {
-    margin-top: 10px;
-    font-size: xx-large;
+  #yequals {
+    font-size: 22pt;
+    position: relative;
+    right: 10px;
   }
 
   #input {
@@ -192,3 +219,4 @@ function scrollToSection(sectionId) {
   }
 
 </style>
+
