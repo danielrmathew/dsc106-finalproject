@@ -1,6 +1,7 @@
 <script>
   import Graph from '../components/Graph.svelte'
   import BallGraph from '../components/BallGraph.svelte'
+  import StockGraph from './StockGraph.svelte';
   import Polynomial from 'polynomial';
   import * as math from 'mathjs';
   import { validPolyAvail, polyFunction } from '../lib/store.js'
@@ -88,8 +89,12 @@ function scrollToSection(sectionId) {
         <BallGraph />
       </div>
     </section>
-    <section id="scenario-2">
-
+    <section id="scenario-2" onload="displayStockPages('stock_pages');">
+      <button on:click={() => nextPage('stock')} type="page_handler" class="arrow right"></button>
+      <p id = 'page_counter'>{displaySectionPages(curr_stock_page, stock_pages)}</p>
+      <div id ="StockGraph">
+        <StockGraph />
+      </div>
     </section>
     <section id="scenario-3">
       
@@ -223,4 +228,14 @@ function scrollToSection(sectionId) {
       to { transform: translate3d(0, 0, 0);     }
       from   { transform: translate3d(0, 200px, 0); }
   }
+  #StockGraph {
+    /* center the graph */
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    top: 20%;
+  }
+
+
 </style>
