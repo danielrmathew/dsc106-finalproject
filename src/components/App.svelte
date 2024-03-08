@@ -78,8 +78,12 @@ function scrollToSection(sectionId) {
       </div>
     </section>
     <section id="scenario-1" onload="displayBasketballPages('basket_pages');">
-      <button on:click={() => nextPage('basketball')} type="page_handler" class="arrow right"></button>
-      <p id = 'page_counter'>{displaySectionPages(curr_basketball_page, basketball_pages)}</p>
+      <div class="ball"></div>
+      <script src="script.js"></script> 
+      <div class="page_controls">
+        <button on:click={() => nextPage('basketball')} type="page_handler" class="arrow"></button>
+        <p id = 'page_counter'>{displaySectionPages(curr_basketball_page, basketball_pages)}</p>
+      </div>
       <div id ="BallGraph">
         <BallGraph />
       </div>
@@ -106,36 +110,38 @@ function scrollToSection(sectionId) {
     padding: 0;
   }
 
-  /* .disable-scroll{
-    overflow-y: hidden;
-  } */
-
   #input {
     height:60px;
     font-size:22pt;
   }
 
+  .page_controls {
+    position: absolute;
+    top: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+  }
+
   .arrow {
-        position: absolute;
-        border: solid black;
-        top: 15%;
-        border-width: 0 4px 4px 0;
-        display: inline-block;
-        padding: 4px;
-    }
+    position: absolute;
+    right : 46%;
+    display: block;
+    width: 25px;
+    height: 25px;
+    
+    border: none;
+    background-image: url("Screen Shot 2024-03-08 at 12.06.26 PM.jpg");
+    background-size: cover;
+  }
 
-    #page_counter {
-      position: absolute;
-      top: 10%;
-      left: 50%;
-      transform: translate(-33%, 0);
-      font-size: 15pt;
-    }
-
-    .right {
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-    }
+  #page_counter {
+    position: absolute;
+    font-size: 15pt;
+    display: block;
+  }
 
   .input_container {
     display: flex;
@@ -199,5 +205,22 @@ function scrollToSection(sectionId) {
     top: 20%;
   }
 
+  .ball {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;         /* Turns a square into a circle   */
+      background-color: #FF5722;  /* Sets color to Orange           */
 
+      animation: bounce 0.5s;
+      animation-direction: alternate;
+      animation-iteration-count: infinite;
+  }
+
+  @keyframes bounce {
+      to { transform: translate3d(0, 0, 0);     }
+      from   { transform: translate3d(0, 200px, 0); }
+  }
 </style>
