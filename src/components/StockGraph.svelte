@@ -142,6 +142,96 @@
             .y(d => y(Object.values(d)[0]))
             .curve(d3.curveMonotoneX);
 
+        // TOOL TIP
+        var tooltip = d3.select("#StockGraph")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("width", "100px")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px");
+        
+        // tooltip explaining function's significance
+        var tooltipText = d3.select("#tooltip-text")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("width", "350px")
+            .style("right", "0px")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px");
+
+        var valueTooltip = d3.select("#StockGraph")
+            .append("div")
+            .style("opacity", 0)
+            .attr("class", "tooltip")
+            .style("background-color", "white")
+            .style("border", "solid")
+            .style("width", "100px")
+            .style("border-width", "2px")
+            .style("border-radius", "5px")
+            .style("padding", "5px")
+
+
+        function showTooltip(event, lineName) {
+            console.log('showing tooltip');
+            const [x, y] = d3.pointer(event);
+            tooltip.transition().duration(200).style("opacity", 0.9);
+            tooltip.html(`<strong>${lineName}</strong>`)
+                .style("left", (x + 10) + "px")
+                .style("top", (y - 20) + "px");
+        }
+
+        function showSignificanceTooltip(event, lineName) {
+            console.log('showing tooltip');
+            const [x, y] = d3.pointer(event);
+            tooltipText.transition().duration(200).style("opacity", 0.9);
+
+            if (lineName == 'f(x)') {
+                //console.log('Got here') // gets here
+                tooltipText.html(`<p>This line depicts what a potential stock's (lets call it Company X) growth and decline can look like\n
+                    We can see by the annotations the highs and lows of Company X -- we would consider these to be the lcoal mins and maxes \n
+                    of the company's stock./p>`)
+                    .style("left", (x + 10) + "px")
+                    .style("top", (y - 20) + "px");
+            }
+
+            else if (lineName == "f'(x)") {
+                tooltipText.html(`<p>This line is f'(x).
+                    \nIt represents the CHANGE of your original function.\n
+                    If f(x) represents the position of a car on a track at a given time,
+                    f'(x) would represent the car's velocity at that time.\n
+                    </p>`)
+                    .style("left", (x + 10) + "px")
+                    .style("top", (y - 20) + "px");
+                }
+            
+            else if (lineName == "f''(x)") {
+                tooltipText.html(`<p>This line is f''(x).
+                    \nIt represents the CHANGE of the CHANGE of your original function.\n
+                    If f(x) represents the position of a car on a track at a given time,
+                    f''(x) would represent the car's acceleration at that time.\n
+                    </p>`)
+                    .style("left", (x + 10) + "px")
+                    .style("top", (y - 20) + "px");
+                }
+            }
+        
+
+        function hideTooltip() {
+            tooltip.transition().duration(200).style("opacity", 0);
+        }
+
+        function hideSignificanceTooltip() {
+            tooltipText.transition().duration(200).style("opacity", 0);
+        }
+
         draw_first_page = () => {
             SVG.append("path")
                     .datum(polyData)
@@ -150,7 +240,16 @@
                     .attr("stroke", "orange")
                     .attr("class", "poly-line")
                     .attr("stroke-width", 3)
-                    .attr("d", polyLine);
+                    .attr("d", polyLine)
+                    .on("mouseover", (event, d) => {
+                        // showTooltip(event, "f(x)");
+                        showSignificanceTooltip(event, "f(x)");
+                    })
+                    .on("mousemove", (event, d) => showSignificanceTooltip(event, 'f(x)'))
+                    .on("mouseout", () => {
+                        // hideTooltip();
+                        hideSignificanceTooltip();
+                    });
                 
         // animate the line drawing
         var totalLength = SVG.select('.poly-line').node().getTotalLength();
@@ -260,6 +359,7 @@
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
     <div id="StockGraph"></div>
+    <div id="tooltip-text"></div>
 </main> 
   
 <style>
@@ -269,5 +369,10 @@
         align-items: center;
         padding-top: 5%;
         padding-bottom: 5%
+    }
+
+    #tooltip-text {
+        position: absolute;
+        top: 15%;
     }
 </style> 
