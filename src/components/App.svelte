@@ -80,7 +80,6 @@ function scrollToSection(sectionId) {
     </section>
     <section id="scenario-1" onload="displayBasketballPages('basket_pages');">
       <div class="ball"></div>
-      <script src="script.js"></script> 
       <div class="page_controls">
         <button on:click={() => nextPage('basketball')} type="page_handler" class="arrow"></button>
         <p id = 'page_counter'>{displaySectionPages(curr_basketball_page, basketball_pages)}</p>
@@ -90,8 +89,10 @@ function scrollToSection(sectionId) {
       </div>
     </section>
     <section id="scenario-2" onload="displayStockPages('stock_pages');">
-      <button on:click={() => nextPage('stock')} type="page_handler" class="arrow right"></button>
-      <p id = 'page_counter'>{displaySectionPages(curr_stock_page, stock_pages)}</p>
+      <div class="page_controls">
+        <button on:click={() => nextPage('stock')} type="page_handler" class="arrow"></button>
+        <p id = 'page_counter'>{displaySectionPages(curr_stock_page, stock_pages)}</p>
+      </div>
       <div id ="StockGraph">
         <StockGraph />
       </div>
