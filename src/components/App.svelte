@@ -1,82 +1,20 @@
 <script>
   import Graph from '../components/Graph.svelte'
+  import BallGraph from '../components/BallGraph.svelte'
   import Polynomial from 'polynomial';
   import * as math from 'mathjs';
   import { validPolyAvail, polyFunction } from '../lib/store.js'
-  // import {updatePoly} from '../components/Graph.svelte'
-  // import * as d3 from 'd3';
+  import { global_basketball_page, global_stock_page} from '../lib/store.js'
 
-  
   let poly;
 
-  // function checkValidParentheses(str) {
-  //   const stack = [];
-  //   const map = {
-  //     '(': ')'
-  //   }
+  var curr_basketball_page = 1;
+  const basketball_pages = 5;
 
-  //   for (let i = 0; i < str.length; i++) {
-  //     if (str[i] === '(') {
-  //       stack.push(str[i]);
-  //     } else if (str[i] === ')'){
-  //       if (stack.length === 0) {
-  //         return false;
-  //       }
-  //       let last = stack.pop();
-  //     }
-  //   }
-
-  //   if (stack.length !== 0) {
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
+  var curr_stock_page = 1;
+  const stock_pages = 5;
 
   function isValidPolynomial(str) {
-    // Remove whitespace from the string
-    // str = str.replace(/\s/g, '');
-
-    // // Make sure there are no back to back operators
-    // const noBackToBackOperators = str.match(/(\+|\-|\*\/){2,}/);
-    // if (noBackToBackOperators) {
-    //   console.log('I failed at back to back operators');
-    //   return false;
-    // }
-
-    // // if there are parentheses, make sure they are valid
-    // if (str.includes('(') || str.includes(')')) {
-    //     const validParentheses = checkValidParentheses(str);
-    //     if (!validParentheses) {
-    //       console.log('I failed at valid parentheses');
-    //       return false;
-    //     }
-    //   }
-
-    // // if the term ends with an operator, it is invalid
-    // const endsWithOperator = str.match(/(\+|\-|\*\/)$/);
-    // if (endsWithOperator) {
-    //   console.log('I failed at ends with operator');
-    //   return false;
-    // }
-
-    // const terms = str.match(/(\+|\-|\*\/)?[a-z0-9.^]+/gi);
-
-    // console.log("Terms: " + terms);
-
-    // for (let i = 0; i < terms.length; i++) {
-    //   const term = terms[i];
-    //   // make sure term only contains valid characters
-    //   const validTerm = term.match(/^(\+|\-|\*\/)?[0-9x.]+(\^)?[0-9x.]*?$/i);
-
-    //   if (!validTerm) {
-    //     console.log('I failed at valid term');
-    //     return false;
-    //   }
-    // }
-
-    // return true;
-
     try {
       const parser = math.parser();
       parser.evaluate(`t(x) = ${poly}`)
@@ -104,23 +42,21 @@ function scrollToSection(sectionId) {
     } else {
       console.log('Invalid polynomial');
     }
-
-    // if (validPoly) {}
   }
 
-  // function mouseInGraph() {
-  //   console.log('Mouse in graph');
+  function nextPage(page_type) {
+    if (page_type == 'basketball') {
+      curr_basketball_page = (curr_basketball_page) % basketball_pages + 1;
+      global_basketball_page.set(curr_basketball_page);
+    } else if (page_type == 'stock') {
+      curr_stock_page = (curr_stock_page) % stock_pages + 1;
+      global_stock_page.set(curr_stock_page);
+    }
+  }
 
-  //   // if mouse is in the graph, disable page scrolling
-  //   document.querySelector('#chart').classList.add('disable-scroll');
-  // }
-
-  // function mouseOutGraph() {
-  //   console.log('Mouse out graph');
-
-  //   // if mouse is out of the graph, enable page scrolling
-  //   document.querySelector('#chart').classList.remove('disable-scroll');
-  // }
+  function displaySectionPages(curr_section_page, section_pages) {
+    return curr_section_page + ' / ' + section_pages;
+  }
 
 </script>
 
@@ -141,8 +77,12 @@ function scrollToSection(sectionId) {
         <Graph />
       </div>
     </section>
-    <section id="scenario-1">
-
+    <section id="scenario-1" onload="displayBasketballPages('basket_pages');">
+      <button on:click={() => nextPage('basketball')} type="page_handler" class="arrow right"></button>
+      <p id = 'page_counter'>{displaySectionPages(curr_basketball_page, basketball_pages)}</p>
+      <div id ="BallGraph">
+        <BallGraph />
+      </div>
     </section>
     <section id="scenario-2">
 
@@ -175,6 +115,28 @@ function scrollToSection(sectionId) {
     font-size:22pt;
   }
 
+  .arrow {
+        position: absolute;
+        border: solid black;
+        top: 15%;
+        border-width: 0 4px 4px 0;
+        display: inline-block;
+        padding: 4px;
+    }
+
+    #page_counter {
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-33%, 0);
+      font-size: 15pt;
+    }
+
+    .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    }
+
   .input_container {
     display: flex;
     justify-content: center;
@@ -195,6 +157,7 @@ function scrollToSection(sectionId) {
     text-align: center;
     padding: 0;
     border-style: solid;
+    position: relative;
   }
 
   #intro {
@@ -226,5 +189,15 @@ function scrollToSection(sectionId) {
     align-items: center;
     top: 10%;
   }
+
+  #BallGraph {
+    /* center the graph */
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    top: 20%;
+  }
+
 
 </style>
