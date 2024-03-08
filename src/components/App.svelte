@@ -141,6 +141,15 @@ function scrollToSection(sectionId) {
         <Graph />
       </div>
     </section>
+    <section id="scenario-1">
+
+    </section>
+    <section id="scenario-2">
+
+    </section>
+    <section id="scenario-3">
+      
+    </section>
   </div>
 </main>
 
