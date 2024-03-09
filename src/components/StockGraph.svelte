@@ -6,7 +6,7 @@
     // import { validPolyAvail, polyFunction } from '../lib/store.js'
     import * as math from 'mathjs';
     import { parse } from 'svelte/compiler';
-    import { global_stock_page } from '../lib/store.js'
+    import { global_stock_page, global_stock_text} from '../lib/store.js'
     
     let poly = '3x^3 + 1/2 (1 - x) - 2/3 x^5 - sin(x)';
 
@@ -16,6 +16,7 @@
     let draw_third_page;
     let draw_fourth_page;
     let reset_to_first_page;
+
 
     $: {
             global_stock_page.subscribe(funcVal => {
@@ -200,6 +201,8 @@
                     of the company's stock./p>`)
                     .style("left", (x + 10) + "px")
                     .style("top", (y - 20) + "px");
+
+                // stock_text = 'looking at f(x)';
             }
 
             else if (lineName == "f'(x)") {
@@ -332,23 +335,29 @@
     function drawPages() {
 
         if (reset & curr_stock_page == 1) {
+            console.log('func for first page');
+            global_stock_text.set("Welcome to the stock graph. Here we are going to go through an example of how understanding the key components of a function can be utilized to understand a company's stock trends. Specifically, we will be looking into the local mins and maxes, along with their relationship to the first derivative of the original function.<br><br>For this graph, we generated a function that looks similar to what a company's stock trends could look like over a short period of time.<br><br>f(x) = 3x^3 + 1/2 (1 - x) - 2/3 x^5 - sin(x).");
             reset_to_first_page();
         }
 
         else if (curr_stock_page == 2) {
             console.log('Drawing first page');
+            global_stock_text.set("Now this is the original function that we dicussed on the previous page. This function clearly falls and rises just as normal stocks would do in real life with real companies. The key thing to note here is how we are able to simulate real life stock conditions with mathematical functions. In the visualization to the right notice how we label the local mins and maxes of the stock's growth. For the min that occurs around x = -1.75, this would be the optimal time to buy the stock for Company X. Why? - because this is the lowest point for the Company X's stock price for a long time since it's decline (which occurs much earlier). The local max occcurs around x = 1.75. This would be the optimal time to sell Company X stock because this would be the highest point for the stock price before a sharp decline in value. <br> <br> Let's dive deeper into what these values mean. ");
             draw_first_page();
         }
         else if (curr_stock_page == 3) {
-            console.log('Drawing second page');
+            console.log('Drawing second page')
+            global_stock_text.set("The function drawn to the right is our original function's first derivative f'(x) = -cos(x) - 10x^4 / 3 + 9x^2 - 1/2. You are probably wondering how the first derivative relates to understanding stocks. It is significant when identifying critical points in a stock's trajectory, such as local minima and maxima. These points often signify potential turning points in a stock's performance, indicating periods of significant growth or decline.  The first derivative essentially represents the rate of change of a stock's value over time, analogous to the velocity of a moving object as we saw with the basektball's motion in the previous example. In the visualization to the right note how the x-intercepts (where the line crosses the x-axis) is exactly where we noted the local minimas and maximas in the original function. ");
             draw_second_page();
         }
         else if (curr_stock_page == 4) {
             console.log('Drawing third page');
+            global_stock_text.set("The function drawn to the right is our original function's second derivative f''(x) = sin(x) - 40x^3 / 3 + 18x . In the context of stocks, the second derivative represents the rate of change of the first derivative, akin to acceleration in physics, and financial acceleration provides deeper insights into the acceleration or deceleration of a stock's price movements. The local minimas and maximas in the second derivative can illuminate inflection points in a stock's trajectory, indicating potential shifts in the rate of ascent or descent which we call points of convexity / concavity. These points provide valuable cues such as if as stock is entering a phase of sustained growth, leveling off, or experiencing heightened volatility.");
             draw_third_page();
         }
         else if (curr_stock_page == 5){
             console.log('Drawing fourth page');
+            global_stock_text.set("Considering all forms of our stock function - f(x), f'(x), and f''(x) - we are able to consider all we have discussed thus far and their relationships with one another. We note the minimas and maximas of f(x) align with the zeros of the f'(x), and same goes for f'(x) with f''(x). Further more, we can see how the zeroes of f''(x) align with the points of convexity and concavity of our original function. Overall, a holistic understanding of these terms and practiced application of these ideas in the stock market can yield informed decisions that generate massive wealth for a stock enthusiast. Continue scrolling to explore more or press the arrow to rewatch the series.");
             draw_fourth_page();
             reset = true;
         }
@@ -358,7 +367,11 @@
 
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
-    <div id="StockGraph"></div>
+    <div id="StockGraph">    </div>
+    <div id='StockText'>
+        <h1 id='stock-header'>Stock Graph</h1>
+        <p id="stock-text"> {$global_stock_text}</p>
+    </div>
     <div id="tooltip-text"></div>
 </main> 
   
@@ -372,7 +385,37 @@
     }
 
     #tooltip-text {
-        position: absolute;
+        position: relative;
+        margin-right: 200px;
         top: 15%;
+
+    }
+
+    #StockGraph {
+        position: relative;
+        /* margin-right: 100px; */
+        /* left: 10%; */
+        margin-left: 200px;
+        padding-left: 20%;
+    }
+
+    #stock-header {
+        position: absolute;
+        top: 0;
+        left: 10%;
+        max-width: 400px; /* Set the maximum width as needed */
+        overflow: hidden; /* Optional: hide content if it overflows */
+        white-space: wrap; /* Optional: prevent line breaks */
+        /* padding-left: 20%;         */
+    }
+
+    #stock-text {
+        position: absolute;
+        top: 10%;
+        left: 5%;
+        max-width: 300px; /* Set the maximum width as needed */
+        overflow: hidden; /* Optional: hide content if it overflows */
+        white-space: wrap; /* Optional: prevent line breaks */
+        /* padding-left: 20%;         */
     }
 </style> 
