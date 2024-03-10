@@ -196,9 +196,9 @@
 
             if (lineName == 'f(x)') {
                 //console.log('Got here') // gets here
-                tooltipText.html(`<p>This line depicts what a potential stock's (lets call it Company X) growth and decline can look like\n
+                tooltipText.html(`This line depicts what a potential stock's (lets call it Company X) growth and decline can look like\n
                     We can see by the annotations the highs and lows of Company X -- we would consider these to be the lcoal mins and maxes \n
-                    of the company's stock./p>`)
+                    of the company's stock.`)
                     .style("left", (x + 10) + "px")
                     .style("top", (y - 20) + "px");
 
@@ -336,13 +336,13 @@
 
         if (reset & curr_stock_page == 1) {
             console.log('func for first page');
-            global_stock_text.set("Welcome to the stock graph. Here we are going to go through an example of how understanding the key components of a function can be utilized to understand a company's stock trends. Specifically, we will be looking into the local mins and maxes, along with their relationship to the first derivative of the original function.<br><br>For this graph, we generated a function that looks similar to what a company's stock trends could look like over a short period of time.<br><br>f(x) = 3x^3 + 1/2 (1 - x) - 2/3 x^5 - sin(x).");
+            global_stock_text.set("Welcome to the stock graph. Here we are going to go through an example of how understanding the key components of a function can be utilized to understand a company's stock trends. Specifically, we will be looking into the local mins and maxes, along with their relationship to the first derivative of the original function. For this graph, we generated a function that looks similar to what a company's stock trends could look like over a short period of time. f(x) = 3x^3 + 1/2 (1 - x) - 2/3 x^5 - sin(x).");
             reset_to_first_page();
         }
 
         else if (curr_stock_page == 2) {
             console.log('Drawing first page');
-            global_stock_text.set("Now this is the original function that we dicussed on the previous page. This function clearly falls and rises just as normal stocks would do in real life with real companies. The key thing to note here is how we are able to simulate real life stock conditions with mathematical functions. In the visualization to the right notice how we label the local mins and maxes of the stock's growth. For the min that occurs around x = -1.75, this would be the optimal time to buy the stock for Company X. Why? - because this is the lowest point for the Company X's stock price for a long time since it's decline (which occurs much earlier). The local max occcurs around x = 1.75. This would be the optimal time to sell Company X stock because this would be the highest point for the stock price before a sharp decline in value. <br> <br> Let's dive deeper into what these values mean. ");
+            global_stock_text.set("Now this is the original function that we dicussed on the previous page. This function clearly falls and rises just as normal stocks would do in real life with real companies. The key thing to note here is how we are able to simulate real life stock conditions with mathematical functions. In the visualization to the right notice how we label the local mins and maxes of the stock's growth. For the min that occurs around x = -1.75, this would be the optimal time to buy the stock for Company X. Why? - because this is the lowest point for the Company X's stock price for a long time since it's decline (which occurs much earlier). The local max occcurs around x = 1.75. This would be the optimal time to sell Company X stock because this would be the highest point for the stock price before a sharp decline in value. Let's dive deeper into what these values mean. ");
             draw_first_page();
         }
         else if (curr_stock_page == 3) {

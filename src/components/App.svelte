@@ -83,7 +83,7 @@ function scrollToSection(sectionId) {
     <section id="scenario-2" onload="displayStockPages('stock_pages');">
       <div class="page_controls">
         <button on:click={() => nextPage('stock')} type="page_handler" class="arrow"></button>
-        <p id = 'page_counter'>{displaySectionPages(curr_stock_page, stock_pages)}</p>
+        <p id='page_counter'>{displaySectionPages(curr_stock_page, stock_pages)}</p>
       </div>
       <div id ="StockGraph">
         <StockGraph />
@@ -101,6 +101,9 @@ function scrollToSection(sectionId) {
       <div id="Graph">
         <Graph />
       </div>
+    </section>
+    <section id="conclusion">
+      <p style="font-size: 23px; width: 400px;">Hopefully you leave this site with a greater appreciation for the wonders of the derivative! While it may have been annoying to learn years ago, the real world applications go far beyond what we have shown so far. Keep Calm and Derive!</p>
     </section>
   </div>
 </main>
@@ -173,7 +176,7 @@ function scrollToSection(sectionId) {
     position: relative;
   }
 
-  #intro {
+  #intro, #conclusion {
     background-color: rgba(255,255,255,0.5);
     background-image: url('intro-background.jpg'); /* would prefer this file to be in assets but it doesn't work there for some reason, so has to be in components*/
     background-blend-mode: lighten;
