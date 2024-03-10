@@ -386,7 +386,7 @@
 
     #tooltip-text {
         position: relative;
-        margin-right: 200px;
+        /* margin-right: 200px; */
         top: 15%;
 
     }
@@ -395,7 +395,7 @@
         position: relative;
         /* margin-right: 100px; */
         /* left: 10%; */
-        margin-left: 200px;
+        margin-left: none;
         padding-left: 20%;
     }
 
@@ -403,7 +403,7 @@
         position: absolute;
         top: 0;
         left: 10%;
-        max-width: 400px; /* Set the maximum width as needed */
+        max-width: 300px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
         white-space: wrap; /* Optional: prevent line breaks */
         /* padding-left: 20%;         */

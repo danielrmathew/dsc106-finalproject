@@ -151,6 +151,8 @@
                     .attr("class", "poly-line")
                     .attr("stroke-width", 3)
                     .attr("d", polyLine);
+
+            d3.select("#annotation").html("This is the <em>position</em> of the basketball. You can see it bouncing up and down, slowly losing height until it eventually stops bouncing.")
                 
             // animate the line drawing
             var totalLength = SVG.select('.poly-line').node().getTotalLength();
@@ -165,6 +167,8 @@
         }        
 
         draw_second_page = () => {
+            SVG.selectAll('.poly-text').remove();
+
             // Add first derivative line to graph
             SVG.append("path")
                 .datum(firstDerivativeData)
@@ -174,6 +178,8 @@
                 .attr("class", "first-derivative-line")
                 .attr("stroke-width", 3)
                 .attr("d", firstDerivativeLine);
+
+            d3.select("#annotation").html("This is the derivative of the position of the basketball, more commonly recognized as its <em>velocity</em>. This line is modeling the rate of change of the basketball's position over time.")               
             
             var totalLength = SVG.select('.first-derivative-line').node().getTotalLength();
             // console.log(totalLength);
@@ -189,6 +195,8 @@
         }
 
         draw_third_page = () => {
+            SVG.selectAll('.poly-text').remove();
+
             // Add second derivative line to graph
             SVG.append("path")
                 .datum(secondDerivativeData)
@@ -198,6 +206,8 @@
                 .attr("class", "second-derivative-line")
                 .attr("stroke-width", 3)
                 .attr("d", secondDerivativeLine);
+
+            d3.select("#annotation").html("Finally, we have the second derivative of the position, or the first derivative of the velocity. This is the basketball's <em>acceleration</em>, the rate of change of its velocity. A positive acceleration would mean an increasing velocity, and a negative accleration is the opposite.")
             
             var totalLength = SVG.select('.second-derivative-line').node().getTotalLength();
             // console.log(totalLength);
@@ -213,6 +223,7 @@
         }
 
         draw_fourth_page = () => {
+            d3.select('#annotation').html("You can see roughly see how the lines relate to each other. Move onto the next section to see how derivatives are used in another interesting way.");
             SVG.selectAll('.poly-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
             SVG.selectAll('.first-derivative-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
         }
@@ -260,6 +271,7 @@
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
     <div id="BallGraph"></div>
+    <div id="annotation"></div>
 </main> 
   
 <style>
@@ -269,5 +281,13 @@
         align-items: center;
         padding-top: 5%;
         padding-bottom: 5%
+    }
+
+    #annotation {
+        position: absolute; /* Position the annotation absolutely within the main container */
+        top: 100px; 
+        right: 50px; 
+        font-size: 16px; /* Adjust font size as desired */
+        width: 200px;
     }
 </style> 

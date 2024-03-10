@@ -1,7 +1,7 @@
 <script>
   import Graph from '../components/Graph.svelte'
   import BallGraph from '../components/BallGraph.svelte'
-  import StockGraph from './StockGraph.svelte';
+  import StockGraph from '../components/StockGraph.svelte';
   import Polynomial from 'polynomial';
   import * as math from 'mathjs';
   import { validPolyAvail, polyFunction } from '../lib/store.js'
@@ -62,21 +62,13 @@ function scrollToSection(sectionId) {
 </script>
 
 <main>
+  <head>
+    <title>Keep Calm and Derive!</title>
+  </head>
   <div class="container">
     <section id="intro">
-      <div id="intro-div">
-        <span style="font-size: 50px;">Hello! Input your favorite</span> <span style="font-size: 20px;"> (single variable)</span> <span style="font-size: 50px;"> math function!</span>
-        <div class = 'input_container'>
-          <p id = 'yequals'>y =</p>
-          <input id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
-          <button on:click={validatePoly} type="submit">Enter</button>
-        </div>
-      </div>
-    </section>
-    <section id="chart">
-      <div id="Graph">
-        <Graph />
-      </div>
+      <p style="font-size: 23px; width: 400px;">Welcome to <b>Keep Calm and Derive!</b> This explanation is for those of you who still doubt the 
+        importance of calculus. We shall do what AP Calculus only tried to do in high school: show why the derivative is important.</p>
     </section>
     <section id="scenario-1" onload="displayBasketballPages('basket_pages');">
       <div class="ball"></div>
@@ -97,8 +89,18 @@ function scrollToSection(sectionId) {
         <StockGraph />
       </div>
     </section>
-    <section id="scenario-3">
-      
+    <section id="chart">
+      <div id="intro-div">
+        <span style="font-size: 25px;">Input your favorite</span> <span style="font-size: 10px;"> (single variable)</span> <span style="font-size: 25px;"> math function!</span>
+        <div class = 'input_container'>
+          <p id='yequals'>f(x) =</p>
+          <input style='height: 30px;' id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
+          <button style='transform: translate(5px, 5px);' on:click={validatePoly} type="submit">Enter</button>
+        </div>
+      </div>
+      <div id="Graph">
+        <Graph />
+      </div>
     </section>
   </div>
 </main>
@@ -137,7 +139,6 @@ function scrollToSection(sectionId) {
     display: block;
     width: 25px;
     height: 25px;
-    
     border: none;
     background-image: url("Screen Shot 2024-03-08 at 12.06.26 PM.jpg");
     background-size: cover;
@@ -183,14 +184,19 @@ function scrollToSection(sectionId) {
     align-items: center;
   }
 
+  #intro-div {
+    margin-top: 20px;
+  }
+
   #yequals {
-    font-size: 22pt;
+    font-size: 25px;
     position: relative;
     right: 10px;
+    transform: translate(0px, 4px)
   }
 
   #input {
-    margin-top: 15px;
+    margin-top: 10px;
   }
 
   #Graph {
@@ -199,7 +205,7 @@ function scrollToSection(sectionId) {
     position: relative;
     justify-content: center;
     align-items: center;
-    top: 10%;
+    top: 0%;
   }
 
   #BallGraph {
@@ -229,6 +235,7 @@ function scrollToSection(sectionId) {
       to { transform: translate3d(0, 0, 0);     }
       from   { transform: translate3d(0, 200px, 0); }
   }
+
   #StockGraph {
     /* center the graph */
     display: flex;
@@ -238,5 +245,8 @@ function scrollToSection(sectionId) {
     top: 20%;
   }
 
+  #chart {
+    background-color: rgb(205, 224, 227);
+  }
 
 </style>
