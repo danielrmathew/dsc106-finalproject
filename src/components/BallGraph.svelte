@@ -225,7 +225,7 @@
         }
 
         draw_fourth_page = () => {
-            d3.select('#annotation').html("You can see roughly see how the lines relate to each other. Move onto the next section to see how derivatives are used in another interesting way. When the ball is at its peak, the velocity is 0. The velocity dips into the negative and the ball begins to fall, eventually hitting the ground. This is a good example of how derivatives can be used to model real-world phenomena.");
+            d3.select('#annotation').html("You can see roughly see how the lines relate to each other. When the ball is at its peak, the velocity is 0. The velocity dips into the negative and the ball begins to fall, eventually hitting the ground. This is a good example of how derivatives can be used to model real-world phenomena.  Move onto the next section to see how derivatives are used in another interesting way.");
             SVG.selectAll('.poly-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
             SVG.selectAll('.first-derivative-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
         }
