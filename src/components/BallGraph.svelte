@@ -141,6 +141,8 @@
             .x(d => x(Object.keys(d)[0]))
             .y(d => y(Object.values(d)[0]))
             .curve(d3.curveMonotoneX);
+        
+        d3.select("#annotation").html("This is a graph of a basketball bouncing up and down. The x-axis represents time, and the y-axis represents the height of the basketball. The basketball starts at a height of 10, and bounces up and down with a period of 2.5 seconds. The graph is a sinusoidal function, and the basketball will eventually stop bouncing.")
 
         draw_first_page = () => {
             SVG.append("path")
@@ -179,7 +181,7 @@
                 .attr("stroke-width", 3)
                 .attr("d", firstDerivativeLine);
 
-            d3.select("#annotation").html("This is the derivative of the position of the basketball, more commonly recognized as its <em>velocity</em>. This line is modeling the rate of change of the basketball's position over time.")               
+            d3.select("#annotation").html("This is the derivative of the position of the basketball, more commonly recognized as its <em>velocity</em>. This line is modeling the rate of change of the basketball's position over time. You can see that the velocity immediately shoots back up to a positive value after the curve reaches its minimum. This is because the basketball is bouncing back up.")               
             
             var totalLength = SVG.select('.first-derivative-line').node().getTotalLength();
             // console.log(totalLength);
@@ -223,7 +225,7 @@
         }
 
         draw_fourth_page = () => {
-            d3.select('#annotation').html("You can see roughly see how the lines relate to each other. Move onto the next section to see how derivatives are used in another interesting way.");
+            d3.select('#annotation').html("You can see roughly see how the lines relate to each other. Move onto the next section to see how derivatives are used in another interesting way. When the ball is at its peak, the velocity is 0. The velocity dips into the negative and the ball begins to fall, eventually hitting the ground. This is a good example of how derivatives can be used to model real-world phenomena.");
             SVG.selectAll('.poly-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
             SVG.selectAll('.first-derivative-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
         }
@@ -271,10 +273,22 @@
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
     <div id="BallGraph"></div>
+    <h1 id='ball-header'>Basketball Graph</h1>
     <div id="annotation"></div>
 </main> 
   
 <style>
+
+    #ball-header {
+        position: absolute;
+        top: 10%;
+        right: 3%;
+        max-width: 300px; /* Set the maximum width as needed */
+        overflow: hidden; /* Optional: hide content if it overflows */
+        white-space: wrap; /* Optional: prevent line breaks */
+        /* padding-left: 20%;         */
+    }
+
     main {
         display: flex;
         justify-content: center;
@@ -285,7 +299,7 @@
 
     #annotation {
         position: absolute; /* Position the annotation absolutely within the main container */
-        top: 100px; 
+        top: 120px; 
         right: 50px; 
         font-size: 16px; /* Adjust font size as desired */
         width: 200px;
