@@ -91,7 +91,7 @@ function scrollToSection(sectionId) {
     </section>
     <section id="chart">
       <div id="intro-div">
-        <span style="font-size: 25px;">Input your favorite</span> <span style="font-size: 10px;"> (single variable)</span> <span style="font-size: 25px;"> math function!</span>
+        <span style="font-size: 25px;">Input your favorite</span> <span style="font-size: 10px;"> (single variable)</span> <span style="font-size: 25px;"> function!</span>
         <div class = 'input_container'>
           <p id='yequals'>f(x) =</p>
           <input style='height: 30px;' id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
