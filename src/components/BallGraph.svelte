@@ -154,8 +154,66 @@
                     .attr("stroke-width", 3)
                     .attr("d", polyLine);
 
-            d3.select("#annotation").html("This is the <em>position</em> of the basketball. You can see it bouncing up and down, slowly losing height until it eventually stops bouncing.")
-                
+            d3.select("#annotation").html("This is the <em>position</em> of the basketball. You can see it bouncing up and down, slowly losing height until it eventually stops bouncing.");
+            
+            // max line
+            const exLines = d3.line()
+                .x(d => x(Object.keys(d)[0]))
+                .y(d => y(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+            const xMax = d3.range(0, 1.5, 0.1); 
+            const maxData = xMax.map(x => ({ [x]: 5.842 }));
+
+            SVG.append("path")
+                    .datum(maxData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "gold")
+                    .attr("class", "poly-line")
+                    .attr("stroke-width", 5)
+                    .attr("stroke-dasharray", "10,5")
+                    .attr("d", exLines);
+
+            SVG.append('text')
+                .attr("x", '100') 
+                .attr("y", '100') 
+                .attr("text-anchor", "start")
+                .attr("dy", 10) // Adjust the vertical position as needed
+                .attr("dx", -90) // Adjust the horizontal position as needed
+                .text('Local Maxima')
+                .style("font-size", "12px")
+                .style("fill", "black")
+                .style("font-size", "20px") 
+                .style("font-family", "ui-monospace") 
+                .style("font-weight", "bold");
+
+            const xMin = d3.range(4, 5.5, 0.1); 
+            const minData = xMin.map(x => ({ [x]: 0 }));
+
+            SVG.append("path")
+                    .datum(minData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "silver")
+                    .attr("class", "poly-line")
+                    .attr("stroke-width", 5)
+                    .attr("stroke-dasharray", "10,5")
+                    .attr("d", exLines);
+
+            SVG.append('text')
+                .attr("x", '300') 
+                .attr("y", '350') 
+                .attr("text-anchor", "start")
+                .attr("dy", 10) // Adjust the vertical position as needed
+                .attr("dx", -90) // Adjust the horizontal position as needed
+                .text('Local Minima')
+                .style("font-size", "12px")
+                .style("fill", "black")
+                .style("font-size", "20px") 
+                .style("font-family", "ui-monospace") 
+                .style("font-weight", "bold");
+
+
             // animate the line drawing
             var totalLength = SVG.select('.poly-line').node().getTotalLength();
             // console.log(totalLength);
@@ -170,6 +228,7 @@
 
         draw_second_page = () => {
             SVG.selectAll('.poly-text').remove();
+            SVG.selectAll('text').remove();
 
             // Add first derivative line to graph
             SVG.append("path")
@@ -225,9 +284,10 @@
         }
 
         draw_fourth_page = () => {
-            d3.select('#annotation').html("You can see roughly see how the lines relate to each other. When the ball is at its peak, the velocity is 0. The velocity dips into the negative and the ball begins to fall, eventually hitting the ground. This is a good example of how derivatives can be used to model real-world phenomena.  Move onto the next section to see how derivatives are used in another interesting way.");
+            d3.select('#annotation').html("You can roughly see how the lines relate to each other. When the ball is at its peak, the velocity is 0. The velocity dips into the negative and the ball begins to fall, eventually hitting the ground. This is a good example of how derivatives can be used to model real-world phenomena.  Move onto the next section to see how derivatives are used in another interesting way.");
             SVG.selectAll('.poly-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
             SVG.selectAll('.first-derivative-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
+            // SVG.selectAll('.exLines').attr('opacity', 0);
         }
 
         reset_to_first_page = () => {
