@@ -123,7 +123,7 @@
         const second_derivative = first_derivative.derive(1);
         console.log('Second Derivative: ' + second_derivative);
 
-        const xValues = d3.range(-5, 5.1, 0.1);
+        const xValues = d3.range(-2.4, 2.5, 0.1);
 
         const polyData = xValues.map(x => ({ [x]: parser.evaluate(`f(${x})`) }));
         const polyLine = d3.line()
