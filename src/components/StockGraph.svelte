@@ -487,7 +487,7 @@
         position: absolute;
         top: 10%;
         left: 5%;
-        max-width: 300px; /* Set the maximum width as needed */
+        max-width: 250px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
         white-space: wrap; /* Optional: prevent line breaks */
         /* padding-left: 20%;         */
