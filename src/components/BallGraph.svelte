@@ -175,11 +175,11 @@
                     .attr("d", exLines);
 
             SVG.append('text')
-                .attr("x", '100') 
-                .attr("y", '100') 
+                .attr("x", '0') 
+                .attr("y", '50') 
                 .attr("text-anchor", "start")
-                .attr("dy", 10) // Adjust the vertical position as needed
-                .attr("dx", -90) // Adjust the horizontal position as needed
+                .attr("dy", 0) // Adjust the vertical position as needed
+                .attr("dx", 0) // Adjust the horizontal position as needed
                 .text('Local Maxima')
                 .style("font-size", "12px")
                 .style("fill", "black")
@@ -201,11 +201,11 @@
                     .attr("d", exLines);
 
             SVG.append('text')
-                .attr("x", '300') 
-                .attr("y", '350') 
+                .attr("x", '170') 
+                .attr("y", '250') 
                 .attr("text-anchor", "start")
-                .attr("dy", 10) // Adjust the vertical position as needed
-                .attr("dx", -90) // Adjust the horizontal position as needed
+                .attr("dy", 0) // Adjust the vertical position as needed
+                .attr("dx", 0) // Adjust the horizontal position as needed
                 .text('Local Minima')
                 .style("font-size", "12px")
                 .style("fill", "black")

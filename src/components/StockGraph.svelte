@@ -253,20 +253,94 @@
                         // hideTooltip();
                         hideSignificanceTooltip();
                     });
+
+            // max line
+            const exLines = d3.line()
+                .x(d => x(Object.keys(d)[0]))
+                .y(d => y(Object.values(d)[0]))
+                .curve(d3.curveMonotoneX);
+
+
+            const xMax1 = d3.range(-1.1, 0.4, 0.1); 
+            const maxData1 = xMax1.map(x => ({ [x]: 0.93 }));
+
+            SVG.append("path")
+                    .datum(maxData1)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "gold")
+                    .attr("class", "poly-line")
+                    .attr("stroke-width", 5)
+                    .attr("stroke-dasharray", "10,5")
+                    .attr("d", exLines);
+
+            const xMax2 = d3.range(1, 2.5, 0.1); 
+            const maxData2 = xMax2.map(x => ({ [x]: 4.1 }));
+
+            SVG.append("path")
+                    .datum(maxData2)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "gold")
+                    .attr("class", "poly-line")
+                    .attr("stroke-width", 5)
+                    .attr("stroke-dasharray", "10,5")
+                    .attr("d", exLines);
+
+            SVG.append('text')
+                .attr("x", '450') 
+                .attr("y", '125') 
+                .attr("text-anchor", "start")
+                .attr("dy", 10) // Adjust the vertical position as needed
+                .attr("dx", -90) // Adjust the horizontal position as needed
+                .text('Local Maximas')
+                .style("font-size", "12px")
+                .style("fill", "black")
+                .style("font-size", "20px") 
+                .style("font-family", "ui-monospace") 
+                .style("font-weight", "bold");
+
+            const xMin = d3.range(-2.3, -0.8, 0.1); 
+            const minData = xMin.map(x => ({ [x]: -3 }));
+
+            SVG.append("path")
+                    .datum(minData)
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke", "silver")
+                    .attr("class", "poly-line")
+                    .attr("stroke-width", 5)
+                    .attr("stroke-dasharray", "10,5")
+                    .attr("d", exLines);
+
+            SVG.append('text')
+                .attr("x", '300') 
+                .attr("y", '300') 
+                .attr("text-anchor", "start")
+                .attr("dy", 10) // Adjust the vertical position as needed
+                .attr("dx", -90) // Adjust the horizontal position as needed
+                .text('Local Minima')
+                .style("font-size", "12px")
+                .style("fill", "black")
+                .style("font-size", "20px") 
+                .style("font-family", "ui-monospace") 
+                .style("font-weight", "bold");
                 
-        // animate the line drawing
-        var totalLength = SVG.select('.poly-line').node().getTotalLength();
-        // console.log(totalLength);
-        SVG.select('.poly-line')
-            .attr("stroke-dasharray", totalLength + " " + totalLength)
-            .attr("stroke-dashoffset", totalLength)
-            .transition()
-            .duration(2500)
-            .ease(d3.easeLinear)
-            .attr("stroke-dashoffset", 0);
+            // animate the line drawing
+            var totalLength = SVG.select('.poly-line').node().getTotalLength();
+            // console.log(totalLength);
+            SVG.select('.poly-line')
+                .attr("stroke-dasharray", totalLength + " " + totalLength)
+                .attr("stroke-dashoffset", totalLength)
+                .transition()
+                .duration(2500)
+                .ease(d3.easeLinear)
+                .attr("stroke-dashoffset", 0);
         }        
 
         draw_second_page = () => {
+            SVG.selectAll('text').remove();
+
             // Add first derivative line to graph
             SVG.append("path")
                 .datum(firstDerivativeData)
