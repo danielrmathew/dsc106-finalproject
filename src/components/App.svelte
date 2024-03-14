@@ -2,7 +2,6 @@
   import Graph from '../components/Graph.svelte'
   import BallGraph from '../components/BallGraph.svelte'
   import StockGraph from '../components/StockGraph.svelte';
-  import Polynomial from 'polynomial';
   import * as math from 'mathjs';
   import { validPolyAvail, polyFunction } from '../lib/store.js'
   import { global_basketball_page, global_stock_page} from '../lib/store.js'
@@ -15,35 +14,35 @@
   var curr_stock_page = 1;
   const stock_pages = 5;
 
-  function isValidPolynomial(str) {
-    try {
-      const parser = math.parser();
-      parser.evaluate(`t(x) = ${poly}`)
-      parser.evaluate('t(0)')
-    } catch {
-      return false;
-    }
-    return true;
-}
+//   function isValidPolynomial(str) {
+//     try {
+//       const parser = math.parser();
+//       parser.evaluate(`t(x) = ${poly}`)
+//       parser.evaluate('t(0)')
+//     } catch {
+//       return false;
+//     }
+//     return true;
+// }
 
-function scrollToSection(sectionId) {
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
+// function scrollToSection(sectionId) {
+//     const section = document.getElementById(sectionId);
+//     if (section) {
+//       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+//     }
+//   }
 
-  function validatePoly() {
-    if (isValidPolynomial(poly)) {
-      console.log('Valid polynomial');
-      console.log(poly);
-      polyFunction.set(poly);
-      validPolyAvail.set(true);
-      scrollToSection('chart');
-    } else {
-      console.log('Invalid polynomial');
-    }
-  }
+//   function validatePoly() {
+//     if (isValidPolynomial(poly)) {
+//       console.log('Valid polynomial');
+//       // console.log(poly);
+//       polyFunction.set(poly);
+//       validPolyAvail.set(true);
+//       scrollToSection('chart');
+//     } else {
+//       console.log('Invalid polynomial');
+//     }
+//   }
 
   function nextPage(page_type) {
     if (page_type == 'basketball') {
@@ -90,14 +89,14 @@ function scrollToSection(sectionId) {
       </div>
     </section>
     <section id="chart">
-      <div id="intro-div">
+      <!-- <div id="intro-div">
         <span style="font-size: 25px;">Input your favorite</span> <span style="font-size: 10px;"> (single variable)</span> <span style="font-size: 25px;"> function!</span>
         <div class = 'input_container'>
           <p id='yequals'>f(x) =</p>
           <input style='height: 30px;' id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
           <button style='transform: translate(5px, 5px);' on:click={validatePoly} type="submit">Enter</button>
         </div>
-      </div>
+      </div> -->
       <div id="Graph">
         <Graph />
       </div>
@@ -119,11 +118,6 @@ function scrollToSection(sectionId) {
   :global(body) {
     margin: 0;
     padding: 0;
-  }
-
-  #input {
-    height:60px;
-    font-size:22pt;
   }
 
   .page_controls {
@@ -153,11 +147,32 @@ function scrollToSection(sectionId) {
     display: block;
   }
 
-  .input_container {
+  /* .input_container {
     display: flex;
     justify-content: center;
     align-items: center;
   }
+
+  #intro-div {
+    margin-top: 20px;
+  }
+
+  #yequals {
+    font-size: 25px;
+    position: relative;
+    right: 10px;
+    transform: translate(0px, 4px)
+  }
+
+  #input {
+    margin-top: 10px;
+  }
+
+  #input {
+    height:60px;
+    font-size:22pt;
+  } */
+
 
   .container {
     scroll-snap-type: y mandatory;
@@ -187,21 +202,7 @@ function scrollToSection(sectionId) {
     align-items: center;
   }
 
-  #intro-div {
-    margin-top: 20px;
-  }
-
-  #yequals {
-    font-size: 25px;
-    position: relative;
-    right: 10px;
-    transform: translate(0px, 4px)
-  }
-
-  #input {
-    margin-top: 10px;
-  }
-
+  
   #Graph {
     /* center the graph */
     display: flex;
