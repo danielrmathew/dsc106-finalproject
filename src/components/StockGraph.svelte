@@ -479,7 +479,7 @@
         left: 10%;
         max-width: 300px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
-        white-space: wrap; /* Optional: prevent line breaks */
+        white-space: wrap; 
         /* padding-left: 20%;         */
     }
 
