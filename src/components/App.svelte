@@ -226,8 +226,8 @@
     top: 20%;
     }
 
-  #chart {
+  /* #chart {
     background-color: rgb(205, 224, 227);
-  }
+  } */
 
 </style>

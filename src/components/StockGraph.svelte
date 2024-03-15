@@ -429,7 +429,7 @@
             SVG.selectAll('#max-line-stock').transition().duration(1000).ease(d3.easeLinear).attr("opacity", 0);
             SVG.selectAll('#min-line-stock').transition().duration(1000).ease(d3.easeLinear).attr("opacity", 0);
 
-            d3.select("#stock-text").html("Obviously, there are many more factors to consider when investing in stocks.<br><br>There is no way to magically attain a function that perfectly models a stock's growth and decline. If there was, we wouldn't bother making this guide for you!<br><br>However, a holistic understanding of these terms and practiced application of these ideas in the stock market can yield informed decisions that generate massive wealth for a stock enthusiast.<br><br>Continue scrolling to explore more or press the arrow to rewatch the series.")
+            d3.select("#stock-text").html("Obviously, there are many more factors to consider when investing in stocks.<br><br>There is no way to magically attain a function that perfectly models a stock's growth and decline. If there was, you and I would be in the Bahamas!<br><br>However, a holistic understanding of these terms and practiced application of these ideas in the stock market can yield informed decisions that generate massive wealth for a stock enthusiast.<br><br>Continue scrolling to explore more or press the arrow to rewatch the series.")
         }
 
         reset_to_first_page = () => {

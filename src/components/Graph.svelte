@@ -536,11 +536,11 @@
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
     <div id="intro-div">
-        <span style="font-size: 25px;">Input your favorite</span> <span style="font-size: 10px;"> (single variable)</span> <span style="font-size: 25px;"> function!</span>
+        <span style="font-size: 30px; font-family: Indie Flower">Input your favorite</span> <span style="font-size: 15px; font-family: Indie Flower"> (single variable)</span> <span style="font-size: 30px; font-family: Indie Flower"> function!</span>
         <div class = 'input_container'>
           <p id='yequals'>f(x) =</p>
-          <input style='height: 30px;' id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
-          <button style='transform: translate(5px, 5px);' on:click={validatePoly} type="submit">Enter</button>
+          <input style='height: 30px; font-family: Indie Flower' id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
+          <button style='transform: translate(5px, 5px); font-family: Indie Flower' on:click={validatePoly} type="submit">Enter</button>
         </div>
     </div>
     <div id="graph"></div>
@@ -548,6 +548,8 @@
 </main> 
   
 <style>
+     @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
     main {
         display: flex;
         flex-direction: column;
@@ -558,6 +560,7 @@
     #tooltip-text {
         position: absolute;
         top: 15%;
+        font-family: "Indie Flower", cursive;
     }
 
     #intro-div {
@@ -573,7 +576,8 @@
     
 
     #yequals {
-        font-size: 25px;
+        font-size: 30px;
+        font-family: "Indie Flower", cursive;
         position: relative;
         right: 10px;
         transform: translate(0px, 4px)
