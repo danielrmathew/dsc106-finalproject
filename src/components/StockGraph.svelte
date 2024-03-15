@@ -55,8 +55,8 @@
         }
 
         // set the dimensions and margins of the graph
-        var margin = {top: 10, right: 30, bottom: 30, left: 60},
-            width = (window.innerWidth / 1.5) - margin.left - margin.right,
+        var margin = {top: 10, right: 30, bottom: 30, left: 250},
+            width = (window.innerWidth / 1.5) - margin.left / 2 - margin.right,
             height = (window.innerHeight / 1.5) - margin.top - margin.bottom;
         
         // append the SVG object to the body of the page
@@ -148,97 +148,97 @@
             .curve(d3.curveMonotoneX);
 
         // TOOL TIP
-        var tooltip = d3.select("#StockGraph")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("position", "absolute")
-            .style("width", "100px")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px");
+        // var tooltip = d3.select("#StockGraph")
+        //     .append("div")
+        //     .style("opacity", 0)
+        //     .attr("class", "tooltip")
+        //     .style("background-color", "white")
+        //     .style("border", "solid")
+        //     .style("position", "absolute")
+        //     .style("width", "100px")
+        //     .style("border-width", "2px")
+        //     .style("border-radius", "5px")
+        //     .style("padding", "5px");
         
-        // tooltip explaining function's significance
-        var tooltipText = d3.select("#tooltip-text")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("width", "350px")
-            .style("right", "0px")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px");
+        // // tooltip explaining function's significance
+        // var tooltipText = d3.select("#tooltip-text")
+        //     .append("div")
+        //     .style("opacity", 0)
+        //     .attr("class", "tooltip")
+        //     .style("background-color", "white")
+        //     .style("border", "solid")
+        //     .style("width", "350px")
+        //     .style("right", "0px")
+        //     .style("border-width", "2px")
+        //     .style("border-radius", "5px")
+        //     .style("padding", "5px");
 
-        var valueTooltip = d3.select("#StockGraph")
-            .append("div")
-            .style("opacity", 0)
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("width", "100px")
-            .style("border-width", "2px")
-            .style("border-radius", "5px")
-            .style("padding", "5px")
+        // var valueTooltip = d3.select("#StockGraph")
+        //     .append("div")
+        //     .style("opacity", 0)
+        //     .attr("class", "tooltip")
+        //     .style("background-color", "white")
+        //     .style("border", "solid")
+        //     .style("width", "100px")
+        //     .style("border-width", "2px")
+        //     .style("border-radius", "5px")
+        //     .style("padding", "5px")
 
 
-        function showTooltip(event, lineName) {
-            console.log('showing tooltip');
-            const [x, y] = d3.pointer(event);
-            tooltip.transition().duration(200).style("opacity", 0.9);
-            tooltip.html(`<strong>${lineName}</strong>`)
-                .style("left", (x + 10) + "px")
-                .style("top", (y - 20) + "px");
-        }
+        // function showTooltip(event, lineName) {
+        //     console.log('showing tooltip');
+        //     const [x, y] = d3.pointer(event);
+        //     tooltip.transition().duration(200).style("opacity", 0.9);
+        //     tooltip.html(`<strong>${lineName}</strong>`)
+        //         .style("left", (x + 10) + "px")
+        //         .style("top", (y - 20) + "px");
+        // }
 
-        function showSignificanceTooltip(event, lineName) {
-            console.log('showing tooltip');
-            const [x, y] = d3.pointer(event);
-            tooltipText.transition().duration(200).style("opacity", 0.9);
+        // function showSignificanceTooltip(event, lineName) {
+        //     console.log('showing tooltip');
+        //     const [x, y] = d3.pointer(event);
+        //     tooltipText.transition().duration(200).style("opacity", 0.9);
 
-            if (lineName == 'f(x)') {
-                //console.log('Got here') // gets here
-                tooltipText.html(`This line depicts what a potential stock's (lets call it Company X) growth and decline can look like\n
-                    We can see by the annotations the highs and lows of Company X -- we would consider these to be the lcoal mins and maxes \n
-                    of the company's stock.`)
-                    .style("left", (x + 10) + "px")
-                    .style("top", (y - 20) + "px");
+        //     if (lineName == 'f(x)') {
+        //         //console.log('Got here') // gets here
+        //         tooltipText.html(`This line depicts what a potential stock's (lets call it Company X) growth and decline can look like\n
+        //             We can see by the annotations the highs and lows of Company X -- we would consider these to be the lcoal mins and maxes \n
+        //             of the company's stock.`)
+        //             .style("left", (x + 10) + "px")
+        //             .style("top", (y - 20) + "px");
 
-                // stock_text = 'looking at f(x)';
-            }
+        //         // stock_text = 'looking at f(x)';
+        //     }
 
-            else if (lineName == "f'(x)") {
-                tooltipText.html(`<p>This line is f'(x).
-                    \nIt represents the CHANGE of your original function.\n
-                    If f(x) represents the position of a car on a track at a given time,
-                    f'(x) would represent the car's velocity at that time.\n
-                    </p>`)
-                    .style("left", (x + 10) + "px")
-                    .style("top", (y - 20) + "px");
-                }
+        //     else if (lineName == "f'(x)") {
+        //         tooltipText.html(`<p>This line is f'(x).
+        //             \nIt represents the CHANGE of your original function.\n
+        //             If f(x) represents the position of a car on a track at a given time,
+        //             f'(x) would represent the car's velocity at that time.\n
+        //             </p>`)
+        //             .style("left", (x + 10) + "px")
+        //             .style("top", (y - 20) + "px");
+        //         }
             
-            else if (lineName == "f''(x)") {
-                tooltipText.html(`<p>This line is f''(x).
-                    \nIt represents the CHANGE of the CHANGE of your original function.\n
-                    If f(x) represents the position of a car on a track at a given time,
-                    f''(x) would represent the car's acceleration at that time.\n
-                    </p>`)
-                    .style("left", (x + 10) + "px")
-                    .style("top", (y - 20) + "px");
-                }
-            }
+        //     else if (lineName == "f''(x)") {
+        //         tooltipText.html(`<p>This line is f''(x).
+        //             \nIt represents the CHANGE of the CHANGE of your original function.\n
+        //             If f(x) represents the position of a car on a track at a given time,
+        //             f''(x) would represent the car's acceleration at that time.\n
+        //             </p>`)
+        //             .style("left", (x + 10) + "px")
+        //             .style("top", (y - 20) + "px");
+        //         }
+        //     }
         
 
-        function hideTooltip() {
-            tooltip.transition().duration(200).style("opacity", 0);
-        }
+        // function hideTooltip() {
+        //     tooltip.transition().duration(200).style("opacity", 0);
+        // }
 
-        function hideSignificanceTooltip() {
-            tooltipText.transition().duration(200).style("opacity", 0);
-        }
+        // function hideSignificanceTooltip() {
+        //     tooltipText.transition().duration(200).style("opacity", 0);
+        // }
 
         d3.select("#stock-text").html("Welcome to the world of <u>stock trading!</u><br><br>Let's go through an example of how a function's derivatives can be used to understand a company's <u>stock trends.</u><br><br>Specifically, we will be looking into the <mark>local mins and maxes</mark>, along with their relationship to the first derivative of the original function.")
         
@@ -490,7 +490,7 @@
 
 <main>
     <script src="https://d3js.org/d3.v4.js"></script>
-    <div id="StockGraph">    </div>
+    <div id="StockGraph"></div>
     <div id='StockText'>
         <h1 id='stock-header'>Stock Graph</h1>
         
@@ -520,12 +520,12 @@
 
     #StockGraph {
         position: relative;
-        margin-left: none;
+        margin: 0 auto 0 20%;
     }
 
     #stock-header {
         position: absolute;
-        top: 0;
+        top: -15%;
         left: 8%;
         max-width: 300px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
@@ -536,7 +536,7 @@
 
     #stock-text {
         position: absolute;
-        top: 15%;
+        top: -2%;
         left: 2%;
         max-width: 350px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */

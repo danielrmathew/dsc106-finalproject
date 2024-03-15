@@ -131,6 +131,7 @@
     align-items: center;
     width: 100%;
     margin: auto;
+    left: 5%;
   }
 
   .arrow {
