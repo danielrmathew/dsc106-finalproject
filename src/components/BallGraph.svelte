@@ -1,8 +1,9 @@
 <script>
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
+    import { get, writable } from 'svelte/store';
     import * as d3 from 'd3';
     import Polynomial from 'polynomial';
+
     // import { validPolyAvail, polyFunction } from '../lib/store.js'
     import * as math from 'mathjs';
     import { parse } from 'svelte/compiler';
@@ -148,12 +149,90 @@
         draw_first_page = () => {
             SVG.append("path")
                     .datum(polyData)
+                    .attr("class", "invisible-trigger")
+                    .attr("clip-path", "url(#clip)")
+                    .attr("fill", "none")
+                    .attr("stroke-width", 20)
+                    .attr("stroke", "orange")
+                    .attr("opacity", 0)
+                    .attr("d", polyLine);
+                    
+            SVG.append("path")
+                    .datum(polyData)
                     .attr("clip-path", "url(#clip)")
                     .attr("fill", "none")
                     .attr("stroke", "orange")
                     .attr("class", "poly-line")
                     .attr("stroke-width", 3)
                     .attr("d", polyLine);
+            
+            function calculateSlope(event, xScale, yScale) {
+                // Assuming your line data is stored in polyData
+                const [xPointer, yPointer] = d3.pointer(event);
+                const xValue = xScale.invert(xPointer);
+                const slope = firstDerivativeData.find(d => Object.keys(d)[0] > xValue);
+
+                // return x position, y position, and slope rounded to 2 decimal places
+                return math.round(Object.values(slope)[0], 2);
+                }
+
+            SVG.select('.poly-line')
+                    .on('mouseover', (event,d)  =>{
+                        if (curr_basketball_page == 2) {
+                            const slope = calculateSlope(event, x, y); // Calculate slope at the point where the cursor is hovering
+
+                            //Draws a line with our calculated slope that passes through the cursor's position
+                            const get_current_x = x.invert(d3.pointer(event)[0]);
+                            const get_current_y = y.invert(d3.pointer(event)[1]);
+
+                            const start = get_current_x - 0.5;
+                            const end = get_current_x + 0.5;
+                            const slopeLineData = [{x: x(start), y: y(get_current_y + slope * (start - get_current_x))}, {x: x(end), y: y(get_current_y + slope * (end - get_current_x))}];
+                            
+                            const slopeLine = d3.line()
+                                .x(d => d.x)
+                                .y(d => d.y);
+                            SVG.append('path') // Draw line representing the slope
+                                .datum(slopeLineData)
+                                .attr('class', 'slope-line')
+                                .attr('stroke', 'red')
+                                .attr('stroke-width', 2)
+                                .attr('fill', 'none')
+                                .attr('d', slopeLine);
+                            }
+                    })
+                    .on('mouseout', function() {
+                        SVG.selectAll('.slope-line').remove(); // Remove the slope line when mouse leaves the line
+                    });
+            
+            SVG.select('.invisible-trigger')
+                    .on('mouseover', (event,d)  =>{
+
+                        if (curr_basketball_page == 2) {
+                            const slope = calculateSlope(event, x, y); // Calculate slope at the point where the cursor is hovering
+
+                            //Draws a line with our calculated slope that passes through the cursor's position
+                            const get_current_x = x.invert(d3.pointer(event)[0]);
+                            const get_current_y = y.invert(d3.pointer(event)[1]);
+
+                            const start = get_current_x - 0.5;
+                            const end = get_current_x + 0.5;
+                            const slopeLineData = [{x: x(start), y: y(get_current_y + slope * (start - get_current_x))}, {x: x(end), y: y(get_current_y + slope * (end - get_current_x))}];
+                            
+                            const slopeLine = d3.line()
+                                .x(d => d.x)
+                                .y(d => d.y);
+                            SVG.append('path') // Draw line representing the slope
+                                .datum(slopeLineData)
+                                .attr('class', 'slope-line')
+                                .attr('stroke', 'red')
+                                .attr('stroke-width', 2)
+                                .attr('fill', 'none')
+                                .attr('d', slopeLine);}
+                    })
+                    .on('mouseout', function() {
+                        SVG.selectAll('.slope-line').remove(); // Remove the slope line when mouse leaves the line
+                    });
 
             d3.select("#annotation").html("This is the <mark><em>position</em></mark> of the basketball. You can see it bouncing up and down, slowly losing height until it eventually stops bouncing.<br><br>If this graph looks somewhat familiar, that's because it's a transformation of a <u>sinusoidal function</u> <br><br>Hover over the line to see how slope changes around <mark style='background-color:grey; opacity : 0.7'>minima</mark> and <mark style='background-color:gold'>maxima</mark>.");
             
