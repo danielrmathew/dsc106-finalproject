@@ -170,20 +170,21 @@
                 .attr("fill", "none")
                 .attr("stroke", "gold")
                 .attr("class", "poly-line")
-                .attr("id", "max-line")
+                .attr("id", "max-line-ball")
                 .attr("stroke-width", 5)
                 .attr("stroke-dasharray", "10,5")
                 .attr("d", exLines);
 
-            const maxLine = d3.select("#max-line");
-            const maxBox = maxLine.node().getBBox();
+            const maxLineBall = d3.select("#max-line-ball");
+            const maxBoxBall = maxLineBall.node().getBBox();
 
             SVG.append('text')
-                .attr("x", maxBox.x + maxBox.width + 5) 
-                .attr("y", maxBox.y + maxBox.height / 2) 
+                .attr("x", maxBoxBall.x + maxBoxBall.width + 5) 
+                .attr("y", maxBoxBall.y + maxBoxBall.height / 2) 
                 .attr("text-anchor", "start")
-                .attr("dy", 0) // Adjust the vertical position as needed
-                .attr("dx", 0) // Adjust the horizontal position as needed
+                .attr("dy", -10) // Adjust the vertical position as needed
+                .attr("dx", -55) // Adjust the horizontal position as needed
+                .attr("id", "max-text-ball")
                 .text('Local Maxima')
                 .style("fill", "black")
                 .style("font-size", "medium") 
@@ -194,25 +195,26 @@
             const minData = xMin.map(x => ({ [x]: 0 }));
 
             SVG.append("path")
-                    .datum(minData)
-                    .attr("clip-path", "url(#clip)")
-                    .attr("fill", "none")
-                    .attr("stroke", "silver")
-                    .attr("class", "poly-line")
-                    .attr("id", "min-line")
-                    .attr("stroke-width", 5)
-                    .attr("stroke-dasharray", "10,5")
-                    .attr("d", exLines);
+                .datum(minData)
+                .attr("clip-path", "url(#clip)")
+                .attr("fill", "none")
+                .attr("stroke", "silver")
+                .attr("class", "poly-line")
+                .attr("id", "min-line-ball")
+                .attr("stroke-width", 5)
+                .attr("stroke-dasharray", "10,5")
+                .attr("d", exLines);
 
-            const minLine = d3.select("#min-line");
-            const minBox = minLine.node().getBBox();
+            const minLineBall = d3.select("#min-line-ball");
+            const minBoxBall = minLineBall.node().getBBox();
 
             SVG.append('text')
-                .attr("x", minBox.x + minBox.width + 5) 
-                .attr("y", minBox.y + minBox.height / 2) 
+                .attr("x", minBoxBall.x + minBoxBall.width + 5) 
+                .attr("y", minBoxBall.y + minBoxBall.height / 2) 
                 .attr("text-anchor", "start")
-                .attr("dy", 0) // Adjust the vertical position as needed
-                .attr("dx", 0) // Adjust the horizontal position as needed
+                .attr("dy", 20) // Adjust the vertical position as needed
+                .attr("dx", -55) // Adjust the horizontal position as needed
+                .attr("id", "min-text-ball")
                 .text('Local Minima')
                 .style("fill", "black")
                 .style("font-size", "medium") 
@@ -234,8 +236,7 @@
 
         draw_second_page = () => {
             SVG.selectAll('.poly-text').remove();
-            // SVG.selectAll('text').remove();
-            SVG.selectAll("#max-line, #min-line");
+            SVG.selectAll("#max-text-ball, #min-text-ball").remove();
 
             // Add first derivative line to graph
             SVG.append("path")
