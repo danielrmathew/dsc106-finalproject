@@ -165,25 +165,28 @@
             const maxData = xMax.map(x => ({ [x]: 5.842 }));
 
             SVG.append("path")
-                    .datum(maxData)
-                    .attr("clip-path", "url(#clip)")
-                    .attr("fill", "none")
-                    .attr("stroke", "gold")
-                    .attr("class", "poly-line")
-                    .attr("stroke-width", 5)
-                    .attr("stroke-dasharray", "10,5")
-                    .attr("d", exLines);
+                .datum(maxData)
+                .attr("clip-path", "url(#clip)")
+                .attr("fill", "none")
+                .attr("stroke", "gold")
+                .attr("class", "poly-line")
+                .attr("id", "max-line")
+                .attr("stroke-width", 5)
+                .attr("stroke-dasharray", "10,5")
+                .attr("d", exLines);
+
+            const maxLine = d3.select("#max-line");
+            const maxBox = maxLine.node().getBBox();
 
             SVG.append('text')
-                .attr("x", '0') 
-                .attr("y", '50') 
+                .attr("x", maxBox.x + maxBox.width + 5) 
+                .attr("y", maxBox.y + maxBox.height / 2) 
                 .attr("text-anchor", "start")
                 .attr("dy", 0) // Adjust the vertical position as needed
                 .attr("dx", 0) // Adjust the horizontal position as needed
                 .text('Local Maxima')
-                .style("font-size", "12px")
                 .style("fill", "black")
-                .style("font-size", "20px") 
+                .style("font-size", "medium") 
                 .style("font-family", "ui-monospace") 
                 .style("font-weight", "bold");
 
@@ -196,20 +199,23 @@
                     .attr("fill", "none")
                     .attr("stroke", "silver")
                     .attr("class", "poly-line")
+                    .attr("id", "min-line")
                     .attr("stroke-width", 5)
                     .attr("stroke-dasharray", "10,5")
                     .attr("d", exLines);
 
+            const minLine = d3.select("#min-line");
+            const minBox = minLine.node().getBBox();
+
             SVG.append('text')
-                .attr("x", '170') 
-                .attr("y", '250') 
+                .attr("x", minBox.x + minBox.width + 5) 
+                .attr("y", minBox.y + minBox.height / 2) 
                 .attr("text-anchor", "start")
                 .attr("dy", 0) // Adjust the vertical position as needed
                 .attr("dx", 0) // Adjust the horizontal position as needed
                 .text('Local Minima')
-                .style("font-size", "12px")
                 .style("fill", "black")
-                .style("font-size", "20px") 
+                .style("font-size", "medium") 
                 .style("font-family", "ui-monospace") 
                 .style("font-weight", "bold");
 
@@ -228,7 +234,8 @@
 
         draw_second_page = () => {
             SVG.selectAll('.poly-text').remove();
-            SVG.selectAll('text').remove();
+            // SVG.selectAll('text').remove();
+            SVG.selectAll("#max-line, #min-line");
 
             // Add first derivative line to graph
             SVG.append("path")

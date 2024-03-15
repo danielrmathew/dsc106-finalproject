@@ -276,7 +276,9 @@
                 .attr("d", exLines);
 
             const maxLine = d3.select("#max-line")
+            console.log(maxLine);
             const maxBox = maxLine.node().getBBox();
+            console.log(maxBox);
 
             const xMax2 = d3.range(1, 2.5, 0.1); 
             const maxData2 = xMax2.map(x => ({ [x]: 4.1 }));
@@ -297,6 +299,7 @@
                 .attr("text-anchor", "start")
                 .attr("dy", -10) // Adjust the vertical position as needed
                 .attr("dx", -90) // Adjust the horizontal position as needed
+                .attr("id", "max-text")
                 .text('Local Maximas')
                 .style("fill", "black")
                 .style("font-size", "medium") 
@@ -326,6 +329,7 @@
                 .attr("text-anchor", "start")
                 .attr("dy", 20) // Adjust the vertical position as needed
                 .attr("dx", -90) // Adjust the horizontal position as needed
+                .attr("id", "min-text")
                 .text('Local Minima')
                 .style("fill", "black")
                 .style("font-size", "medium") 
@@ -345,7 +349,7 @@
         }        
 
         draw_second_page = () => {
-            SVG.selectAll('text').remove();
+            SVG.selectAll('#max-text, #min-text').remove();
 
             // Add first derivative line to graph
             SVG.append("path")
