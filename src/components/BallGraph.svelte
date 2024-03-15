@@ -15,6 +15,7 @@
     let draw_second_page;
     let draw_third_page;
     let draw_fourth_page;
+    let draw_fifth_page;
     let reset_to_first_page;
 
     $: {
@@ -142,7 +143,7 @@
             .y(d => y(Object.values(d)[0]))
             .curve(d3.curveMonotoneX);
         
-        d3.select("#annotation").html("This is a graph of a basketball bouncing up and down. The x-axis represents time, and the y-axis represents the height of the basketball. The basketball starts at a height of 10, and bounces up and down with a period of 2.5 seconds. The graph is a sinusoidal function, and the basketball will eventually stop bouncing.")
+        d3.select("#annotation").html("This is a graph of a basketball bouncing up and down. The x-axis represents <u>time</u>, and the y-axis represents the <u>height</u> of the basketball.<br><br>The ball is thrown in the air 6 feet and continues to bounce on the ground until it eventually stops.")
 
         draw_first_page = () => {
             SVG.append("path")
@@ -154,7 +155,7 @@
                     .attr("stroke-width", 3)
                     .attr("d", polyLine);
 
-            d3.select("#annotation").html("This is the <em>position</em> of the basketball. You can see it bouncing up and down, slowly losing height until it eventually stops bouncing.");
+            d3.select("#annotation").html("This is the <mark><em>position</em></mark> of the basketball. You can see it bouncing up and down, slowly losing height until it eventually stops bouncing.<br><br>If this graph looks somewhat familiar, that's because it's a transformation of a <u>sinusoidal function</u> <br><br>Hover over the line to see how slope changes around <mark style='background-color:grey; opacity : 0.7'>minima</mark> and <mark style='background-color:gold'>maxima</mark>.");
             
             // max line
             const exLines = d3.line()
@@ -187,8 +188,8 @@
                 .attr("id", "max-text-ball")
                 .text('Local Maxima')
                 .style("fill", "black")
-                .style("font-size", "medium") 
-                .style("font-family", "ui-monospace") 
+                .style("font-size", "large") 
+                .style("font-family", "Indie Flower") 
                 .style("font-weight", "bold");
 
             const xMin = d3.range(4, 5.5, 0.1); 
@@ -217,8 +218,8 @@
                 .attr("id", "min-text-ball")
                 .text('Local Minima')
                 .style("fill", "black")
-                .style("font-size", "medium") 
-                .style("font-family", "ui-monospace") 
+                .style("font-size", "large") 
+                .style("font-family", "Indie Flower") 
                 .style("font-weight", "bold");
 
 
@@ -248,7 +249,7 @@
                 .attr("stroke-width", 3)
                 .attr("d", firstDerivativeLine);
 
-            d3.select("#annotation").html("This is the derivative of the position of the basketball, more commonly recognized as its <em>velocity</em>. This line is modeling the rate of change of the basketball's position over time. You can see that the velocity immediately shoots back up to a positive value after the curve reaches its minimum. This is because the basketball is bouncing back up.")               
+            d3.select("#annotation").html("This is the derivative of the position of the basketball, more commonly recognized as its <mark><em>velocity</em></mark>.<br><br> This line is modeling the <u>rate of change of the basketball's position over time.</u> You can see that the velocity instantly shoots up to a positive value after the curve reaches its minimum. <br><br> This is because the basketball is <u>bouncing back up.</u>")               
             
             var totalLength = SVG.select('.first-derivative-line').node().getTotalLength();
             // console.log(totalLength);
@@ -276,7 +277,7 @@
                 .attr("stroke-width", 3)
                 .attr("d", secondDerivativeLine);
 
-            d3.select("#annotation").html("Finally, we have the second derivative of the position, or the first derivative of the velocity. This is the basketball's <em>acceleration</em>, the rate of change of its velocity. A positive acceleration would mean an increasing velocity, and a negative accleration is the opposite.")
+            d3.select("#annotation").html("Finally, we have the <u>second derivative</u> of the position, or the <u>first derivative</u> of the velocity. This is the basketball's <mark><em>acceleration</em></mark>, i.e. the rate of change of its velocity. <br><br>A positive acceleration would mean an increasing velocity, and a negative accleration is the opposite.")
             
             var totalLength = SVG.select('.second-derivative-line').node().getTotalLength();
             // console.log(totalLength);
@@ -292,10 +293,19 @@
         }
 
         draw_fourth_page = () => {
-            d3.select('#annotation').html("You can roughly see how the lines relate to each other. When the ball is at its peak, the velocity is 0. The velocity dips into the negative and the ball begins to fall, eventually hitting the ground. This is a good example of how derivatives can be used to model real-world phenomena.  Move onto the next section to see how derivatives are used in another interesting way.");
+            d3.select('#annotation').html("Take a look at <mark style='background-color:orange'>position</mark>, <mark style='background-color:aqua'>velocity</mark>, and <mark style='background-color:lightgreen'>acceleration</mark> overlayed on each other.<br><br>When the ball is at its maximum height, the velocity is <u>zero.</u> The then velocity dips into the negative and the ball begins to fall, eventually hitting the ground. Once again, the velocity at this time is <u>zero!</u>");
             SVG.selectAll('.poly-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
             SVG.selectAll('.first-derivative-line').transition().duration(2500).ease(d3.easeLinear).attr("opacity", 1);
             // SVG.selectAll('.exLines').attr('opacity', 0);
+        }
+
+        draw_fifth_page = () => {
+            d3.select('#annotation').html("Obtaining an object's speed from its position is <u>extremely powerful.</u><br><br>You can't use calculus to get better at basketball, but you <span style='font-size: larger; font-weight:bold'>CAN</span> use it to understand the physics that make some players the best in the world.<br><br>And that's why we're here today. To show you that calculus is not just a tool for solving math problems, but a tool for <mark>understanding the world around us.</mark>");
+            SVG.selectAll('.first-derivative-line').transition().duration(1000).ease(d3.easeLinear).attr("opacity", 0);
+            SVG.selectAll('.second-derivative-line').transition().duration(1000).ease(d3.easeLinear).attr("opacity", 0);
+            SVG.selectAll('#max-line-ball').transition().duration(1000).ease(d3.easeLinear).attr("opacity", 0);
+            SVG.selectAll('#min-line-ball').transition().duration(1000).ease(d3.easeLinear).attr("opacity", 0);
+
         }
 
         reset_to_first_page = () => {
@@ -332,6 +342,11 @@
         else if (curr_basketball_page == 5){
             console.log('Drawing fourth page');
             draw_fourth_page();
+        }
+
+        else if (curr_basketball_page == 6) {
+            console.log('Drawing fifth page');
+            draw_fifth_page();
             reset = true;
         }
     }
@@ -346,16 +361,19 @@
 </main> 
   
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
     #ball-header {
         position: absolute;
-        top: 10%;
-        right: 3%;
+        top: 2%;
+        right: 1%;
         max-width: 300px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
         white-space: wrap; /* Optional: prevent line breaks */
-        /* padding-left: 20%;         */
-    }
+        font-family: 'Indie Flower';
+        font-size: 30px; /* Adjust font size as needed */
+        font-weight: bold; /* Adjust font weight as needed */
+        }
 
     main {
         display: flex;
@@ -367,9 +385,11 @@
 
     #annotation {
         position: absolute; /* Position the annotation absolutely within the main container */
-        top: 120px; 
-        right: 50px; 
-        font-size: 16px; /* Adjust font size as desired */
-        width: 200px;
+        flex:1;
+        top: 20%; 
+        right: 0.2%; 
+        font-family: 'Indie Flower';
+        font-size: 17px; /* Adjust font size as desired */
+        width: 15vw; /* Set the width as needed */
     }
 </style> 

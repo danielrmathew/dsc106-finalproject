@@ -9,10 +9,10 @@
   let poly;
 
   var curr_basketball_page = 1;
-  const basketball_pages = 5;
+  const basketball_pages = 6;
 
   var curr_stock_page = 1;
-  const stock_pages = 5;
+  const stock_pages = 7;
 
 //   function isValidPolynomial(str) {
 //     try {
@@ -108,6 +108,8 @@
 </main>
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+
   * {
     margin: 0;
     padding: 0;
@@ -120,8 +122,9 @@
     padding: 0;
   }
 
+  
   .page_controls {
-    position: absolute;
+    position: relative;
     top: 15%;
     display: flex;
     justify-content: center;
@@ -145,34 +148,7 @@
     position: absolute;
     font-size: 15pt;
     display: block;
-  }
-
-  /* .input_container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #intro-div {
-    margin-top: 20px;
-  }
-
-  #yequals {
-    font-size: 25px;
-    position: relative;
-    right: 10px;
-    transform: translate(0px, 4px)
-  }
-
-  #input {
-    margin-top: 10px;
-  }
-
-  #input {
-    height:60px;
-    font-size:22pt;
-  } */
-
+    }
 
   .container {
     scroll-snap-type: y mandatory;
@@ -219,6 +195,7 @@
     justify-content: center;
     align-items: center;
     top: 20%;
+    left: -2%;
   }
 
   .ball {
@@ -237,7 +214,7 @@
 
   @keyframes bounce {
       to { transform: translate3d(0, 0, 0);     }
-      from   { transform: translate3d(0, 200px, 0); }
+      from   { transform: translate3d(0, 20vh, 0); }
   }
 
   #StockGraph {
@@ -247,7 +224,7 @@
     justify-content: center;
     align-items: center;
     top: 20%;
-  }
+    }
 
   #chart {
     background-color: rgb(205, 224, 227);
