@@ -409,8 +409,9 @@
                 const yValue = yScale.invert(yPointer);
                 valueTooltip.transition().duration(100).style("opacity", 0.9);
                 valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`)
-                    .style("left", (x + 10) + "px")
-                    .style("top", (y - 20) + "px");
+                    .style('position', 'absolute')
+                    .style("left", "0px")
+                    .style("top", "0px");
             }
         
             // recover the new scale
@@ -590,6 +591,11 @@
     #input {
         height:60px;
         font-size:22pt;
+    }
+
+    #tooltip {
+        left: -10%;
+        top: 0%;
     }
     
 </style> 

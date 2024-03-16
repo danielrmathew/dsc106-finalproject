@@ -55,8 +55,8 @@
         }
 
         // set the dimensions and margins of the graph
-        var margin = {top: 10, right: 30, bottom: 30, left: 250},
-            width = (window.innerWidth / 1.5) - margin.left / 2 - margin.right,
+        var margin = {top: 10, right: 30, bottom: 30, left: 300},
+            width = (window.innerWidth / 1.5) - margin.left / 2.5 - margin.right,
             height = (window.innerHeight / 1.5) - margin.top - margin.bottom;
         
         // append the SVG object to the body of the page
@@ -525,7 +525,7 @@
 
     #stock-header {
         position: absolute;
-        top: -15%;
+        top: -17%;
         left: 8%;
         max-width: 300px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
@@ -536,7 +536,7 @@
 
     #stock-text {
         position: absolute;
-        top: -2%;
+        top: -4%;
         left: 2%;
         max-width: 350px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
