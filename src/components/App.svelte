@@ -66,7 +66,7 @@
   </head>
   <div class="container">
     <section id="intro">
-      <p style="font-size: 23px; width: 400px;">Welcome to <b>Keep Calm and Derive!</b> This explanation is for those of you who still doubt the 
+      <p style="font-size: 23px; width: 350px;">Welcome to <b>Keep Calm and Derive!</b> This explanation is for those of you who still doubt the 
         importance of calculus. We shall do what AP Calculus only tried to do in high school: show why the derivative is important.</p>
     </section>
     <section id="scenario-1" onload="displayBasketballPages('basket_pages');">
@@ -102,7 +102,9 @@
       </div>
     </section>
     <section id="conclusion">
-      <p style="font-size: 23px; width: 400px;">Hopefully you leave this site with a greater appreciation for the wonders of the derivative! While it may have been annoying to learn years ago, the real world applications go far beyond what we have shown so far. Keep Calm and Derive!</p>
+      <p style="font-size: 23px; width: 400px;">Hopefully you leave this site with a greater appreciation for the wonders of the derivative! While it may have been 
+        annoying to learn years ago, the real world applications go far beyond what we have shown so far. They're used in measuring the size of earthquakes, modeling the growth rate 
+        of a virus, estimating profit and loss of a business, and much, much more. Thank you for viewing our site!<br> <b>Keep Calm and Derive!</b></p>
     </section>
   </div>
 </main>

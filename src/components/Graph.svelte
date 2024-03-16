@@ -81,7 +81,7 @@
         
         // Add Y axis
         var y = d3.scaleLinear()
-            .domain([-20, 20])
+            .domain([-10, 10])
             .range([ height, 0]);
         var yAxis = SVG.append("g")
             .call(d3.axisLeft(y));
@@ -139,10 +139,11 @@
             yAxis.call(d3.axisLeft(y));
 
             // TOOL TIP
-            var tooltip = d3.select("#graph")
+            var tooltip = d3.select("#tooltip")
                 .append("div")
                 .style("opacity", 0)
                 .attr("class", "tooltip")
+                .attr("id", "line-name")
                 .style("background-color", "white")
                 .style("border", "solid")
                 .style("width", "100px")
@@ -151,22 +152,23 @@
                 .style("padding", "5px");
             
             // tooltip explaining function's significance
-            var tooltipText = d3.select("#tooltip-text")
-                .append("div")
-                .style("opacity", 0)
-                .attr("class", "tooltip")
-                .style("background-color", "white")
-                .style("border", "solid")
-                .style("width", "350px")
-                .style("right", "0px")
-                .style("border-width", "2px")
-                .style("border-radius", "5px")
-                .style("padding", "5px");
+            // var tooltipText = d3.select("#tooltip-text")
+            //     .append("div")
+            //     .style("opacity", 0)
+            //     .attr("class", "tooltip")
+            //     .style("background-color", "white")
+            //     .style("border", "solid")
+            //     .style("width", "350px")
+            //     .style("right", "0px")
+            //     .style("border-width", "2px")
+            //     .style("border-radius", "5px")
+            //     .style("padding", "5px");
 
-            valueTooltip = d3.select("#graph")
+            valueTooltip = d3.select("#tooltip")
                 .append("div")
                 .style("opacity", 0)
                 .attr("class", "tooltip")
+                .attr("id", "line-value")
                 .style("background-color", "white")
                 .style("border", "solid")
                 .style("width", "100px")
@@ -194,51 +196,51 @@
                     .style("top", (y - 20) + "px");
             }
 
-            function showSignificanceTooltip(event, lineName) {
-                console.log('showing tooltip');
-                const [x, y] = d3.pointer(event);
-                tooltipText.transition().duration(200).style("opacity", 0.9);
+            // function showSignificanceTooltip(event, lineName) {
+            //     console.log('showing tooltip');
+            //     const [x, y] = d3.pointer(event);
+            //     tooltipText.transition().duration(200).style("opacity", 0.9);
 
-                if (lineName == 'f(x)') {
-                    tooltipText.html(`<p>This line is f(x).
-                        \nIt represents your original function. Depending on the scenario,
-                        it can describe a variety of different systems.\n
-                        The position of a car on a track at a given time.\n
-                        The amount of money in a bank account.\n
-                        The height of a rocket at a given time.\n</p>`)
-                        .style("left", (x + 10) + "px")
-                        .style("top", (y - 20) + "px");
-                }
+            //     if (lineName == 'f(x)') {
+            //         tooltipText.html(`<p>This line is f(x).
+            //             \nIt represents your original function. Depending on the scenario,
+            //             it can describe a variety of different systems.\n
+            //             The position of a car on a track at a given time.\n
+            //             The amount of money in a bank account.\n
+            //             The height of a rocket at a given time.\n</p>`)
+            //             .style("left", (x + 10) + "px")
+            //             .style("top", (y - 20) + "px");
+            //     }
 
-                else if (lineName == "f'(x)") {
-                    tooltipText.html(`<p>This line is f'(x).
-                        \nIt represents the CHANGE of your original function.\n
-                        If f(x) represents the position of a car on a track at a given time,
-                        f'(x) would represent the car's velocity at that time.\n
-                        </p>`)
-                        .style("left", (x + 10) + "px")
-                        .style("top", (y - 20) + "px");
-                    }
+            //     else if (lineName == "f'(x)") {
+            //         tooltipText.html(`<p>This line is f'(x).
+            //             \nIt represents the CHANGE of your original function.\n
+            //             If f(x) represents the position of a car on a track at a given time,
+            //             f'(x) would represent the car's velocity at that time.\n
+            //             </p>`)
+            //             .style("left", (x + 10) + "px")
+            //             .style("top", (y - 20) + "px");
+            //         }
                 
-                else if (lineName == "f''(x)") {
-                    tooltipText.html(`<p>This line is f''(x).
-                        \nIt represents the CHANGE of the CHANGE of your original function.\n
-                        If f(x) represents the position of a car on a track at a given time,
-                        f''(x) would represent the car's acceleration at that time.\n
-                        </p>`)
-                        .style("left", (x + 10) + "px")
-                        .style("top", (y - 20) + "px");
-                    }
-                }
+            //     else if (lineName == "f''(x)") {
+            //         tooltipText.html(`<p>This line is f''(x).
+            //             \nIt represents the CHANGE of the CHANGE of your original function.\n
+            //             If f(x) represents the position of a car on a track at a given time,
+            //             f''(x) would represent the car's acceleration at that time.\n
+            //             </p>`)
+            //             .style("left", (x + 10) + "px")
+            //             .style("top", (y - 20) + "px");
+            //         }
+            //     }
             
 
             function hideTooltip() {
                 tooltip.transition().duration(200).style("opacity", 0);
             }
 
-            function hideSignificanceTooltip() {
-                tooltipText.transition().duration(200).style("opacity", 0);
-            }
+            // function hideSignificanceTooltip() {
+            //     tooltipText.transition().duration(200).style("opacity", 0);
+            // }
 
             function hideValueTooltip() {
                 valueTooltip.transition().duration(200).style("opacity", 0);
@@ -256,13 +258,13 @@
                 .attr("d", polyLine)
                 .on("mouseover", (event, d) => {
                     showTooltip(event, "f(x)");
-                    showSignificanceTooltip(event, "f(x)");
+                    // showSignificanceTooltip(event, "f(x)");
                 })
                 .on("mousemove", (event, d) => showValueTooltip(event, x, y, valueTooltip))
                 .on("mouseout", () => {
                     hideTooltip();
                     hideValueTooltip();
-                    hideSignificanceTooltip();
+                    // hideSignificanceTooltip();
                 });
 
             SVG.append("path")
@@ -275,18 +277,17 @@
                 .attr("d", polyLine)
                 .on("mouseover", (event, d) => {
                     showTooltip(event, "f(x)");
-                    showSignificanceTooltip(event, "f(x)");
+                    // showSignificanceTooltip(event, "f(x)");
                 })
                 .on("mousemove", (event, d) => showValueTooltip(event, x, y, valueTooltip))
                 .on("mouseout", () => {
                     hideTooltip();
                     hideValueTooltip();
-                    hideSignificanceTooltip();
+                    // hideSignificanceTooltip();
                 });
 
 
             var totalLength = SVG.select('.poly-line').node().getTotalLength();
-            // console.log(totalLength);
             SVG.select('.poly-line')
                 .attr("stroke-dasharray", totalLength + " " + totalLength)
                 .attr("stroke-dashoffset", totalLength)
@@ -314,13 +315,13 @@
                 .attr("d", firstDerivativeLine)
                 .on("mouseover", (event, d) => {
                     showTooltip(event, "f'(x)");
-                    showSignificanceTooltip(event, "f'(x)");
+                    // showSignificanceTooltip(event, "f'(x)");
                 })
                 .on("mousemove", (event, d) => showValueTooltip(event, x, y, valueTooltip))
                 .on("mouseout", () => {
                     hideTooltip();
                     hideValueTooltip();
-                    hideSignificanceTooltip();
+                    // hideSignificanceTooltip();
                 });
             
             SVG.append("path")
@@ -362,13 +363,13 @@
                 .attr("d", secondDerivativeLine)
                 .on("mouseover", (event, d) => {
                     showTooltip(event, "f''(x)");
-                    showSignificanceTooltip(event, "f''(x)");
+                    // showSignificanceTooltip(event, "f''(x)");
                 })
                 .on("mousemove", (event, d) => showValueTooltip(event, x, y, valueTooltip))
                 .on("mouseout", () => {
                     hideTooltip();
                     hideValueTooltip();
-                    hideSignificanceTooltip();
+                    // hideSignificanceTooltip();
                 });
             
             SVG.append("path")
@@ -381,13 +382,13 @@
                 .attr("d", secondDerivativeLine)
                 .on("mouseover", (event, d) => {
                     showTooltip(event, "f''(x)");
-                    showSignificanceTooltip(event, "f''(x)");
+                    // showSignificanceTooltip(event, "f''(x)");
                 })
                 .on("mousemove", (event, d) => showValueTooltip(event, x, y, valueTooltip))
                 .on("mouseout", () => {
                     hideTooltip();
                     hideValueTooltip();
-                    hideSignificanceTooltip();
+                    // hideSignificanceTooltip();
                 });
             
             var totalLength = SVG.select('.second-derivative-line').node().getTotalLength();
@@ -408,10 +409,7 @@
                 const xValue = xScale.invert(xPointer);
                 const yValue = yScale.invert(yPointer);
                 valueTooltip.transition().duration(100).style("opacity", 0.9);
-                valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`)
-                    .style('position', 'absolute')
-                    .style("left", "0px")
-                    .style("top", "0px");
+                valueTooltip.html(`<strong>X:</strong> ${xValue.toFixed(2)}<br><strong>Y:</strong> ${yValue.toFixed(2)}`);
             }
         
             // recover the new scale
@@ -512,7 +510,7 @@
         
         // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
         var zoom = d3.zoom()
-            .scaleExtent([.0, 20])  // This control how much you can unzoom (x0.0) and zoom (x20)
+            .scaleExtent([0.5, 20])  
             .extent([[0, 0], [width, height]])
             .on("zoom", (event) => updateChart(event));
         
@@ -540,12 +538,15 @@
         <span style="font-size: 30px; font-family: Indie Flower">Input your favorite</span> <span style="font-size: 15px; font-family: Indie Flower"> (single variable)</span> <span style="font-size: 30px; font-family: Indie Flower"> function!</span>
         <div class = 'input_container'>
           <p id='yequals'>f(x) =</p>
-          <input style='height: 30px; font-family: Indie Flower' id="input" bind:value={poly} type="text" placeholder=" Enter function here" />
+          <input style='height: 30px; font-family: Indie Flower' id="input" bind:value={poly} type="text" placeholder="i.e. 1/2x^2" />
           <button style='transform: translate(5px, 5px); font-family: Indie Flower' on:click={validatePoly} type="submit">Enter</button>
         </div>
     </div>
-    <div id="graph"></div>
-    <div id="tooltip-text"></div>
+    <div id="graph-container">
+        <div id="graph"></div>
+        <div id="tooltip"></div>
+    </div>
+    <!-- <div id="tooltip-text"></div> -->
 </main> 
   
 <style>
@@ -557,12 +558,12 @@
         align-items: center;
         height: 100vh;
     }
-
+/* 
     #tooltip-text {
         position: absolute;
         top: 15%;
         font-family: "Indie Flower", cursive;
-    }
+    } */
 
     #intro-div {
         margin-top: 20px;
@@ -593,9 +594,14 @@
         font-size:22pt;
     }
 
+    #graph-container {
+        position: relative;
+    }
+
     #tooltip {
-        left: -10%;
-        top: 0%;
+        position: absolute;
+        left: calc(100% + 20px); /* Adjust the value as needed for proper spacing */
+        top: 0;
     }
     
 </style> 
