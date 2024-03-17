@@ -88,7 +88,7 @@
       <p style="font-size: 23px; width: 450px;">Hopefully you leave this site with a greater appreciation for the wonders of the derivative! While it may have been 
         annoying to learn years ago, the real world applications go far beyond what we have shown so far. They're used in measuring the size of earthquakes, modeling the growth rate 
         of a virus, estimating profit and loss of a business, and much, much more. We hope that the demos and the special input graph let you learn about and explore different derivatives and 
-        their purposes. Thank you for viewing our site!<br> <b>Keep Calm and Derive!</b></p>
+        their purposes. Thank you for viewing our site!<br> <b style="font-size: 27px">Keep Calm and Derive!</b></p>
     </section>
   </div>
 </main>
