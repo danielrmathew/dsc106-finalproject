@@ -66,8 +66,10 @@
   </head>
   <div class="container">
     <section id="intro">
-      <p style="font-size: 23px; width: 350px;">Welcome to <b>Keep Calm and Derive!</b> This explanation is for those of you who still doubt the 
-        importance of calculus. We shall do what AP Calculus only tried to do in high school: show why the derivative is important.</p>
+      <p style="font-size: 23px; width: 350px;"><mark>Welcome to <br><b style="font-size: 27px">Keep Calm and Derive!</b> Have you ever banged your head against
+        the wall trying to learn the derivative? Did it leave you wondering why you even had to learn it in the first place?
+        Then this is for you! This explanation is for those of you who still doubt the importance of calculus. 
+        We shall do what AP Calculus failed to do in high school: show how the derivaive can be fun!</mark></p>
     </section>
     <section id="scenario-1" onload="displayBasketballPages('basket_pages');">
       <div class="ball"></div>
@@ -105,11 +107,15 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
 
+  mark {
+    background-color: white;
+  }
+
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: sans-serif;
+    font-family: Georgia, serif;
   }
 
   :global(body) {
@@ -165,10 +171,10 @@
 
   #intro, #conclusion {
     background-color: rgba(255,255,255,0.5);
-    background-image: url('intro-background.jpg'); /* would prefer this file to be in assets but it doesn't work there for some reason, so has to be in components*/
+    background-image: url('confetti_lines.png'); /* would prefer this file to be in assets but it doesn't work there for some reason, so has to be in components*/
     background-blend-mode: lighten;
-    background-repeat: no-repeat;
-    background-size: cover;
+    /* background-repeat: no-repeat; */
+    /* background-size: cover; */
     display: flex;
     justify-content: center;
     align-items: center;

@@ -525,8 +525,7 @@
             .style("pointer-events", "all")
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
             .call(zoom)
-            .call(drag)
-            ;
+            .call(drag);
         // now the user can zoom and it will trigger the function called updateChart
     })
     
