@@ -88,7 +88,28 @@
       </div>
       <div id ="StockGraph">
         <StockGraph />
+
+        <div class="ticker-wrap">
+          <div class="ticker">
+            <div class="ticker__item">AAPL: <mark style='background-color:#FF7F7F; font-family:IBM Plex Mono'>−0.38 (0.22%)↓</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      COST: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+6.32 (0.86%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      GOOGL: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+0.50 (0.33%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      MSFT: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+0.25 (0.18%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      AMZN: <mark style='background-color:#FF7F7F; font-family:IBM Plex Mono'>-1.20 (0.65%)↓</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+                                      TSLA: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+1.80 (1.20%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      CALCGRADE: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+100 (1000%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      NFLX: <mark style='background-color:#FF7F7F; font-family:IBM Plex Mono'>-0.90 (0.60%)↓</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      JPM: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+0.70 (0.45%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      PG: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+0.20 (0.15%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      NVDA: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+2.10 (1.50%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      MA: <mark style='background-color:#FF7F7F; font-family:IBM Plex Mono'>-0.55 (0.40%)↓</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      BA: <mark style='background-color:#FF7F7F; font-family:IBM Plex Mono'>-0.95 (0.70%)↓</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      CRM: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+1.30 (0.85%)↑</mark> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      HD: <mark style='background-color:lightgreen; font-family:IBM Plex Mono'>+0.90</mark> (0.60%)↑ &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  
+                                      </div>
+          </div>
       </div>
+    </div>
     </section>
     <section id="chart">
       <div id="Graph">
@@ -106,6 +127,7 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
 
   mark {
     background-color: white;
@@ -207,16 +229,16 @@
       width: 100px;
       height: 100px;
       border-radius: 50%;         /* Turns a square into a circle   */
-      background-color: #FF5722;  /* Sets color to Orange           */
+      background-image: url("Basketball.png");
+      background-size: cover;
 
-      animation: bounce 0.5s;
-      animation-direction: alternate;
-      animation-iteration-count: infinite;
+      animation: bounce 0.5s alternate infinite;
+
   }
 
   @keyframes bounce {
-      to { transform: translate3d(0, 0, 0);     }
-      from   { transform: translate3d(0, 20vh, 0); }
+      to { transform: translate3d(0, 0, 0)}
+      from   { transform: translate3d(0, 20vh, 0)}
   }
 
   #StockGraph {
@@ -228,8 +250,76 @@
     top: 20%;
     }
 
-  /* #chart {
-    background-color: rgb(205, 224, 227);
-  } */
+  @-webkit-keyframes ticker {
+        0% {
+          -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+          visibility: visible;
+        }
+
+        100% {
+          -webkit-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
+        }
+  }
+
+@keyframes ticker {
+      0% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+      }
+
+      100% {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+      }
+}
+
+.ticker-wrap {
+  position: absolute;
+  bottom: -20%;
+  width: 100%;
+  overflow: hidden;
+  height: 4rem;
+  background-color: rgba(#000, 0.9); 
+  padding-left: 100%;
+  box-sizing: content-box;
+  }
+
+.ticker {
+
+    display: inline-block;
+    height: 4rem;
+    line-height: 4rem;  
+    white-space: nowrap;
+    padding-right: 100%;
+    box-sizing: content-box;
+
+    -webkit-animation-iteration-count: infinite; 
+            animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+            animation-timing-function: linear;
+   -webkit-animation-name: ticker;
+           animation-name: ticker;
+    -webkit-animation-duration: 150s;
+            animation-duration: 150s;
+
+    &__item {
+
+      display: inline-block;
+
+      padding: 0 2rem;
+      font-size: 2rem;
+      color: white;   
+
+    }
+
+  }
+
+  .ticker__item {
+    font-family: 'IBM Plex Mono';
+    font-size: 20px;
+  }
 
 </style>
