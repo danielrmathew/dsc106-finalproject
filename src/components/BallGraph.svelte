@@ -450,7 +450,7 @@
         overflow: hidden; /* Optional: hide content if it overflows */
         white-space: wrap; /* Optional: prevent line breaks */
         font-family: 'Indie Flower';
-        font-size: 30px; /* Adjust font size as needed */
+        font-size: 27px; /* Adjust font size as needed */
         font-weight: bold; /* Adjust font weight as needed */
         }
 
@@ -468,7 +468,7 @@
         top: 20%; 
         right: 0.2%; 
         font-family: 'Indie Flower';
-        font-size: 17px; /* Adjust font size as desired */
+        font-size: 15px; /* Adjust font size as desired */
         width: 15vw; /* Set the width as needed */
     }
 </style> 

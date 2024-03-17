@@ -531,7 +531,7 @@
         overflow: hidden; /* Optional: hide content if it overflows */
         white-space: wrap;
         font-family: "Indie Flower";
-        font-size: 30px;
+        font-size: 27px;
     }
 
     #stock-text {
@@ -541,7 +541,7 @@
         max-width: 350px; /* Set the maximum width as needed */
         overflow: hidden; /* Optional: hide content if it overflows */
         white-space: wrap; /* Optional: prevent line breaks */
-        font-size: 17px;
+        font-size: 15px;
         font-family: "Indie Flower";
     }
 </style> 
