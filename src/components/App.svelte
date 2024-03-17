@@ -2,8 +2,6 @@
   import Graph from '../components/Graph.svelte'
   import BallGraph from '../components/BallGraph.svelte'
   import StockGraph from '../components/StockGraph.svelte';
-  import * as math from 'mathjs';
-  import { validPolyAvail, polyFunction } from '../lib/store.js'
   import { global_basketball_page, global_stock_page} from '../lib/store.js'
 
   let poly;
@@ -13,36 +11,6 @@
 
   var curr_stock_page = 1;
   const stock_pages = 7;
-
-//   function isValidPolynomial(str) {
-//     try {
-//       const parser = math.parser();
-//       parser.evaluate(`t(x) = ${poly}`)
-//       parser.evaluate('t(0)')
-//     } catch {
-//       return false;
-//     }
-//     return true;
-// }
-
-// function scrollToSection(sectionId) {
-//     const section = document.getElementById(sectionId);
-//     if (section) {
-//       section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-//     }
-//   }
-
-//   function validatePoly() {
-//     if (isValidPolynomial(poly)) {
-//       console.log('Valid polynomial');
-//       // console.log(poly);
-//       polyFunction.set(poly);
-//       validPolyAvail.set(true);
-//       scrollToSection('chart');
-//     } else {
-//       console.log('Invalid polynomial');
-//     }
-//   }
 
   function nextPage(page_type) {
     if (page_type == 'basketball') {
@@ -176,6 +144,7 @@
 
   .container {
     scroll-snap-type: y mandatory;
+    overflow-x: hidden;
     overflow-y: scroll;
     height: 100vh;
   }
